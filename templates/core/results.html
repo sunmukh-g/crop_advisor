@@ -1,0 +1,303 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}🌾 Crop Recommendations for {{ query.location }} - Kisan AI{% endblock %}
+
+{% block content %}
+<div class="results-page">
+    <!-- Results Header -->
+    <div class="results-header">
+        <div class="results-hero">
+            <div class="results-badge">
+                <i class="fas fa-robot"></i> AI Analysis Complete
+            </div>
+            <h1>Crop Recommendations</h1>
+            <h2 class="hindi-title">फसल सुझाव रिपोर्ट</h2>
+            <div class="query-pills">
+                <span class="pill"><i class="fas fa-map-marker-alt"></i> {{ query.location }}</span>
+                <span class="pill"><i class="fas fa-layer-group"></i> {{ query.get_soil_type_display }}</span>
+                <span class="pill"><i class="fas fa-calendar"></i> {{ query.get_season_display }}</span>
+                <span class="pill"><i class="fas fa-tint"></i> {{ query.get_water_availability_display }}</span>
+                <span class="pill"><i class="fas fa-expand-arrows-alt"></i> {{ query.land_area }} acres</span>
+            </div>
+            <div class="results-actions">
+                <a href="{% url 'download_report' query.id %}" class="btn btn-primary btn-download" id="download-btn">
+                    <i class="fas fa-file-pdf"></i>
+                    Download PDF Report / रिपोर्ट डाउनलोड करें
+                </a>
+                <a href="{% url 'view_report' query.id %}" class="btn btn-outline" target="_blank">
+                    <i class="fas fa-eye"></i> Preview Report
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline">
+                    <i class="fas fa-plus"></i> New Query
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-container">
+
+        <!-- Weather Widget -->
+        {% if weather %}
+        <div class="widget weather-widget">
+            <div class="widget-icon">🌤️</div>
+            <div class="widget-info">
+                <h4>Current Weather / मौसम</h4>
+                <p>{{ weather.condition }} · {{ weather.temperature }}°C · Humidity: {{ weather.humidity }}%</p>
+            </div>
+            {% if weather.source == 'openweathermap' %}
+            <span class="badge-live">Live Weather</span>
+            {% else %}
+            <span class="badge-estimated">Estimated</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Summary Card -->
+        <div class="summary-card">
+            <div class="summary-icon">🤖</div>
+            <div class="summary-content">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <h3>AI Summary / एआई सारांश</h3>
+                    {% if recommendation.crops_data.0.data_source != 'mock' and recommendation.data_source != 'mock' %}
+                    <span class="badge-live">Real-time AI</span>
+                    {% else %}
+                    <span class="badge-estimated">Demo Model</span>
+                    {% endif %}
+                </div>
+                <p>{{ recommendation.summary }}</p>
+            </div>
+        </div>
+
+        <!-- ===== CROP RECOMMENDATIONS ===== -->
+        <section class="results-section">
+            <div class="section-title-bar">
+                <h2><i class="fas fa-seedling"></i> Recommended Crops / अनुशंसित फसलें</h2>
+                <p>Top {{ crops|length }} crops best suited for your farm</p>
+            </div>
+
+            <div class="crops-grid">
+                {% for crop in crops %}
+                <div class="crop-card {% if forloop.first %}crop-card-primary{% endif %}" style="--delay: {{ forloop.counter0 }}00ms">
+                    {% if forloop.first %}
+                    <div class="crop-badge-top">⭐ Best Choice / सर्वोत्तम</div>
+                    {% endif %}
+
+                    <div class="crop-header">
+                        <div class="crop-icon">
+                            {% if forloop.counter == 1 %}🌾{% elif forloop.counter == 2 %}🌽{% else %}🫘{% endif %}
+                        </div>
+                        <div class="crop-title">
+                            <h3>{{ crop.name }}</h3>
+                            <p class="crop-hindi">{{ crop.hindi_name }}</p>
+                        </div>
+                        <div class="confidence-badge">
+                            <div class="confidence-ring" style="--pct: {{ crop.confidence }}">
+                                <span>{{ crop.confidence }}%</span>
+                            </div>
+                            <small>Match</small>
+                        </div>
+                    </div>
+
+                    <div class="crop-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span class="stat-val">{{ crop.duration_days }} days</span>
+                            <span class="stat-label">Duration</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-boxes"></i>
+                            <span class="stat-val">{{ crop.estimated_yield_per_acre }}</span>
+                            <span class="stat-label">Yield/Acre</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-tint"></i>
+                            <span class="stat-val">{{ crop.water_requirement }}</span>
+                            <span class="stat-label">Water</span>
+                        </div>
+                    </div>
+
+                    <div class="crop-timeline">
+                        <div class="timeline-item sowing">
+                            <i class="fas fa-seedling"></i>
+                            <div>
+                                <strong>Sowing / बुवाई</strong>
+                                <span>{{ crop.sowing_time }}</span>
+                            </div>
+                        </div>
+                        <div class="timeline-arrow">→</div>
+                        <div class="timeline-item harvest">
+                            <i class="fas fa-tractor"></i>
+                            <div>
+                                <strong>Harvest / कटाई</strong>
+                                <span>{{ crop.harvesting_time }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if crop.pros %}
+                    <div class="crop-pros">
+                        {% for pro in crop.pros %}
+                        <span class="pro-tag"><i class="fas fa-check"></i> {{ pro }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if crop.fertilizer %}
+                    <div class="crop-detail-row">
+                        <i class="fas fa-flask"></i>
+                        <strong>Fertilizer:</strong> {{ crop.fertilizer }}
+                    </div>
+                    {% endif %}
+
+                    {% if crop.care_tips %}
+                    <div class="crop-tips">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Tips:</strong> {{ crop.care_tips }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p class="no-data">No crop data available. Please try again.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ===== MANDI PRICES ===== -->
+        <section class="results-section">
+            <div class="section-title-bar">
+                <h2><i class="fas fa-chart-line"></i> Mandi Price Forecast / मंडी मूल्य पूर्वानुमान</h2>
+                <p>Predicted market prices at harvest time</p>
+            </div>
+
+            <div class="mandi-table-wrapper">
+                <table class="mandi-table">
+                    <thead>
+                        <tr>
+                            <th>Crop / फसल</th>
+                            <th>Current Price</th>
+                            <th>Forecast at Harvest</th>
+                            <th>MSP 2024-25</th>
+                            <th>Trend</th>
+                            <th>Best Market</th>
+                            <th>Est. Income/Acre*</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in mandi_prices %}
+                        <tr class="mandi-row">
+                            <td class="crop-name-cell"><strong>{{ p.crop }}</strong></td>
+                            <td class="price-cell">₹{{ p.current_price_per_quintal|default:"N/A" }}</td>
+                            <td class="price-cell forecast">₹{{ p.predicted_price_at_harvest|default:"N/A" }}</td>
+                            <td class="price-cell msp">₹{{ p.msp|default:"N/A" }}</td>
+                            <td class="trend-cell">
+                                {% if p.trend == 'rising' %}
+                                    <span class="trend rising"><i class="fas fa-arrow-up"></i> Rising</span>
+                                {% elif p.trend == 'falling' %}
+                                    <span class="trend falling"><i class="fas fa-arrow-down"></i> Falling</span>
+                                {% else %}
+                                    <span class="trend stable"><i class="fas fa-minus"></i> Stable</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ p.best_market|default:"Local Mandi" }}</td>
+                            <td class="income-cell">
+                                ₹{{ p.estimated_income_per_acre|default:0|floatformat:0 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="7">No price data available</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="table-note">* Multiply forecast price × estimated yield per acre for total income estimate. MSP = Minimum Support Price</p>
+            </div>
+        </section>
+
+        <!-- ===== FARMING CALENDAR ===== -->
+        <section class="results-section">
+            <div class="section-title-bar">
+                <h2><i class="fas fa-calendar-alt"></i> Seasonal Farming Calendar / मौसमी खेती कैलेंडर</h2>
+                <p>Month-by-month farming activities</p>
+            </div>
+
+            <div class="calendar-grid">
+                {% for month in calendar %}
+                <div class="calendar-card {% if month.crops_stage == 'Kharif sowing season' or month.crops_stage == 'Rabi sowing season' or 'sowing' in month.crops_stage|lower %}calendar-active{% endif %}">
+                    <div class="calendar-month">
+                        <span class="month-en">{{ month.month }}</span>
+                        <span class="month-hi">{{ month.hindi_month }}</span>
+                    </div>
+                    <div class="calendar-stage">{{ month.crops_stage }}</div>
+                    <ul class="calendar-activities">
+                        {% for activity in month.activities %}
+                        <li><i class="fas fa-check-circle"></i> {{ activity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% empty %}
+                <p>Calendar data not available</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ===== FARMING TIPS ===== -->
+        {% if tips %}
+        <section class="results-section">
+            <div class="section-title-bar">
+                <h2><i class="fas fa-lightbulb"></i> Farming Tips & Government Schemes / सुझाव और सरकारी योजनाएं</h2>
+            </div>
+            <div class="tips-card">
+                {% for tip in tips.splitlines %}
+                {% if tip.strip %}
+                <div class="tip-item">
+                    <i class="fas fa-leaf"></i>
+                    <p>{{ tip.strip }}</p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Download CTA -->
+        <div class="download-cta">
+            <div class="cta-content">
+                <h3>📄 Download Your Report for Bank Loan</h3>
+                <p>बैंक ऋण आवेदन के लिए पूरी रिपोर्ट PDF में डाउनलोड करें</p>
+                <div class="cta-features">
+                    <span><i class="fas fa-check"></i> Crop Recommendations</span>
+                    <span><i class="fas fa-check"></i> Yield Estimates</span>
+                    <span><i class="fas fa-check"></i> Income Projection</span>
+                    <span><i class="fas fa-check"></i> Mandi Prices</span>
+                </div>
+            </div>
+            <a href="{% url 'download_report' query.id %}" class="btn btn-primary btn-large">
+                <i class="fas fa-download"></i>
+                Download PDF Report
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Animate crop cards on scroll
+const cards = document.querySelectorAll('.crop-card');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1 });
+cards.forEach(card => observer.observe(card));
+
+// Animate confidence rings
+document.querySelectorAll('.confidence-ring').forEach(ring => {
+    const pct = ring.style.getPropertyValue('--pct');
+    ring.style.background = `conic-gradient(#2d7a2d ${pct}%, #e0e0e0 0)`;
+});
+</script>
+{% endblock %}

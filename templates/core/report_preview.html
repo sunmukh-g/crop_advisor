@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kisan AI - Crop Report | {{ query.location }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 12px; color: #222; background: #f5f5f5; }
+        .report-page { max-width: 21cm; margin: 0 auto; background: white; padding: 1.5cm; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        
+        /* Header */
+        .report-header { text-align: center; border-bottom: 3px solid #2d7a2d; padding-bottom: 15px; margin-bottom: 20px; }
+        .report-logo { font-size: 28px; font-weight: 800; color: #2d7a2d; }
+        .report-logo span { background: #2d7a2d; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 5px; }
+        .report-title { font-size: 16px; color: #444; margin-top: 5px; }
+        .report-date { font-size: 11px; color: #888; margin-top: 3px; }
+        
+        /* Section */
+        .section { margin-bottom: 20px; }
+        .section-title { background: #2d7a2d; color: white; padding: 6px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; margin-bottom: 10px; }
+        
+        /* Info Tables */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        th { background: #f0f8f0; color: #2d7a2d; font-weight: 700; padding: 6px 10px; text-align: left; border: 1px solid #d0e8d0; font-size: 11px; }
+        td { padding: 6px 10px; border: 1px solid #e0e0e0; font-size: 11px; }
+        tr:nth-child(even) { background: #fafafa; }
+        
+        /* Crop Cards */
+        .crop-section { border: 1.5px solid #d0e8d0; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+        .crop-name { font-size: 14px; font-weight: 700; color: #2d7a2d; }
+        .crop-hindi { font-size: 13px; color: #555; }
+        .confidence { float: right; background: #2d7a2d; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; }
+        .crop-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+        .detail-box { background: #f0f8f0; padding: 6px; border-radius: 4px; text-align: center; }
+        .detail-label { font-size: 10px; color: #888; }
+        .detail-value { font-size: 11px; font-weight: 600; color: #222; }
+        
+        /* Price Table */
+        .trend-rising { color: #1a7a1a; font-weight: 700; }
+        .trend-falling { color: #cc2222; font-weight: 700; }
+        .trend-stable { color: #886600; font-weight: 700; }
+        
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .cal-card { border: 1px solid #d0e8d0; border-radius: 4px; padding: 6px; font-size: 10px; }
+        .cal-month { font-weight: 700; color: #2d7a2d; font-size: 11px; }
+        .cal-stage { color: #888; font-size: 10px; margin: 2px 0; font-style: italic; }
+        .cal-activity { color: #444; }
+        
+        /* Footer */
+        .report-footer { border-top: 1px solid #ddd; padding-top: 10px; margin-top: 20px; font-size: 10px; color: #888; text-align: center; }
+        
+        /* Print */
+        @media print {
+            body { background: white; }
+            .no-print { display: none !important; }
+            .report-page { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print" style="background:#2d7a2d;color:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <strong>🌾 Kisan AI - Report Preview</strong>
+        <div>
+            <button onclick="window.print()" style="background:white;color:#2d7a2d;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;margin-right:10px;">🖨️ Print</button>
+            <a href="{% url 'download_report' query.id %}" style="background:#f5a623;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;font-weight:600;">📥 Download PDF</a>
+            <a href="{% url 'results' query.id %}" style="background:transparent;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;margin-left:8px;">← Back</a>
+        </div>
+    </div>
+
+    <div class="report-page">
+        <!-- Header -->
+        <div class="report-header">
+            <div class="report-logo">🌾 Kisan <span>AI</span></div>
+            <div class="report-title">AI-Based Crop Recommendation Report / एआई-आधारित फसल सुझाव रिपोर्ट</div>
+            <div class="report-date">Report ID: KAI-{{ query.id|stringformat:"06d" }} | Generated: {% now "d F Y, H:i" %} IST</div>
+            <div style="margin-top:8px;padding:8px;background:#fff8e1;border-radius:4px;font-size:11px;color:#555;">
+                This report is prepared for agricultural advisory purposes and may be submitted to financial institutions for loan applications.
+            </div>
+        </div>
+
+        <!-- Farmer Info -->
+        <div class="section">
+            <div class="section-title">1. Farmer & Farm Information / किसान और खेत की जानकारी</div>
+            <table>
+                <tr>
+                    <th>Location / स्थान</th><td>{{ query.location }}</td>
+                    <th>Season / ऋतु</th><td>{{ query.get_season_display }}</td>
+                </tr>
+                <tr>
+                    <th>Soil Type / मिट्टी</th><td>{{ query.get_soil_type_display }}</td>
+                    <th>Water / जल</th><td>{{ query.get_water_availability_display }}</td>
+                </tr>
+                <tr>
+                    <th>Land Area / क्षेत्र</th><td>{{ query.land_area }} Acres</td>
+                    <th>Language</th><td>{{ query.get_language_display }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="section">
+            <div class="section-title">2. AI Summary / एआई सारांश</div>
+            <p style="padding:10px;background:#f0f8f0;border-radius:4px;line-height:1.6;">{{ recommendation.summary }}</p>
+        </div>
+
+        <!-- Crop Recommendations -->
+        <div class="section">
+            <div class="section-title">3. Recommended Crops / अनुशंसित फसलें</div>
+            {% for crop in crops %}
+            <div class="crop-section">
+                <div>
+                    <span class="confidence">{{ crop.confidence }}% Match</span>
+                    <div class="crop-name">#{{ forloop.counter }}. {{ crop.name }}</div>
+                    <div class="crop-hindi">{{ crop.hindi_name }}</div>
+                </div>
+                <div class="crop-details">
+                    <div class="detail-box"><div class="detail-label">Duration</div><div class="detail-value">{{ crop.duration_days }} days</div></div>
+                    <div class="detail-box"><div class="detail-label">Yield/Acre</div><div class="detail-value">{{ crop.estimated_yield_per_acre }}</div></div>
+                    <div class="detail-box"><div class="detail-label">Water Need</div><div class="detail-value">{{ crop.water_requirement }}</div></div>
+                    <div class="detail-box"><div class="detail-label">Sowing</div><div class="detail-value">{{ crop.sowing_time }}</div></div>
+                    <div class="detail-box"><div class="detail-label">Harvest</div><div class="detail-value">{{ crop.harvesting_time }}</div></div>
+                    <div class="detail-box"><div class="detail-label">Fertilizer</div><div class="detail-value" style="font-size:9px;">{{ crop.fertilizer|truncatechars:30 }}</div></div>
+                </div>
+                {% if crop.care_tips %}
+                <p style="margin-top:6px;font-size:10px;color:#555;"><strong>Tips:</strong> {{ crop.care_tips }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Mandi Prices -->
+        <div class="section">
+            <div class="section-title">4. Mandi Price Forecast / मंडी मूल्य पूर्वानुमान</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Crop</th><th>Current Price (₹/Q)</th><th>Forecast at Harvest</th><th>MSP</th><th>Trend</th><th>Best Market</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in mandi_prices %}
+                    <tr>
+                        <td>{{ p.crop }}</td>
+                        <td>₹{{ p.current_price_per_quintal }}</td>
+                        <td>₹{{ p.predicted_price_at_harvest }}</td>
+                        <td>₹{{ p.msp }}</td>
+                        <td class="trend-{{ p.trend }}">{{ p.trend|capfirst }}</td>
+                        <td>{{ p.best_market }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seasonal Calendar -->
+        <div class="section">
+            <div class="section-title">5. Seasonal Farming Calendar / मौसमी खेती कैलेंडर</div>
+            <div class="calendar-grid">
+                {% for month in calendar %}
+                <div class="cal-card">
+                    <div class="cal-month">{{ month.month }} / {{ month.hindi_month }}</div>
+                    <div class="cal-stage">{{ month.crops_stage }}</div>
+                    {% for activity in month.activities|slice:":2" %}
+                    <div class="cal-activity">• {{ activity }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Government Schemes -->
+        <div class="section">
+            <div class="section-title">6. Government Schemes / सरकारी योजनाएं</div>
+            <table>
+                <tr><th>Scheme</th><th>Benefit</th><th>How to Apply</th></tr>
+                <tr><td>PM-KISAN</td><td>₹6,000/year direct income support</td><td>pmkisan.gov.in or nearest CSC</td></tr>
+                <tr><td>PMFBY (Crop Insurance)</td><td>Insurance at 1.5-2% premium against natural disasters</td><td>Nearest bank before sowing deadline</td></tr>
+                <tr><td>Soil Health Card</td><td>Free soil testing & fertilizer recommendation</td><td>Nearest Krishi Vigyan Kendra</td></tr>
+                <tr><td>Kisan Credit Card</td><td>Crop loans at 4% interest up to ₹3 lakh</td><td>SBI, PNB or cooperative bank</td></tr>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="report-footer">
+            <strong>DISCLAIMER:</strong> This report is AI-generated for advisory purposes only. Actual yields and prices may vary. 
+            Consult local KVK or Agriculture Department for official guidance. This is not a guarantee of income.<br>
+            Report ID: KAI-{{ query.id|stringformat:"06d" }} | Kisan AI System | किसान एआई प्रणाली
+        </div>
+    </div>
+</body>
+</html>

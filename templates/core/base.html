@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Based Crop Recommendation System for Indian Farmers - Get personalized crop advice, yield estimates, mandi prices and seasonal calendar">
+    <title>{% block title %}🌾 Kisan AI - Smart Crop Advisor{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-brand">
+                <span class="brand-icon">🌾</span>
+                <span class="brand-text">Kisan <span class="brand-ai">AI</span></span>
+                <span class="brand-sub">किसान एआई</span>
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                {% if user.is_authenticated %}
+                <span class="nav-link" style="color: #27ae60; font-weight: bold;">
+                    <i class="fas fa-user"></i> {{ user.username }}
+                </span>
+                <a href="{% url 'logout' %}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{% url 'register' %}" class="nav-btn {% if request.resolver_match.url_name == 'register' %}active{% endif %}">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+                {% endif %}
+
+                <a href="/admin/" class="nav-link" target="_blank" title="Admin">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <div class="nav-badge">AI Powered</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-info-circle"></i> {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span>🌾 Kisan AI</span>
+                <p>AI-powered crop advisory for Indian farmers</p>
+            </div>
+            <div class="footer-links">
+                <span>Built with ❤️ for 🇮🇳 Indian Farmers</span>
+                <span class="footer-divider">|</span>
+                <span>Powered by Google Gemini AI</span>
+                <span class="footer-divider">|</span>
+                <span>किसानों की सेवा में</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
