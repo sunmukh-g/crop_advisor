@@ -1,0 +1,105 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="profile-wrapper">
+    <div class="profile-container">
+        <!-- Modern Header -->
+        <div class="profile-header">
+            <span class="header-pre">ACCOUNT SETTINGS</span>
+            <h1 class="header-main">Your Agricultural Profile</h1>
+            <div class="header-bar"></div>
+        </div>
+
+        <div class="profile-card-main">
+            <!-- Left: Identity Panel -->
+            <div class="profile-identity-panel">
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar-glow"></div>
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" class="profile-avatar-img">
+                    <div class="avatar-edit-trigger" title="Change Picture">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+
+                <div class="profile-identity-info">
+                    <h3 class="profile-username">{{ user.username }}</h3>
+                    <div class="profile-badge-member">
+                        <i class="fas fa-certificate"></i> MEMBER SINCE {{ user.date_joined|date:"Y" }}
+                    </div>
+                </div>
+
+                <div class="profile-identity-actions">
+                    <a href="{% url 'dashboard' %}" class="id-action-btn">
+                        <span class="btn-icon"><i class="fas fa-th-large"></i></span>
+                        <span class="btn-text">DASHBOARD</span>
+                    </a>
+                    <a href="{% url 'logout' %}" class="id-action-btn secondary">
+                        <span class="btn-icon"><i class="fas fa-power-off"></i></span>
+                        <span class="btn-text">LOGOUT</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Form Area -->
+            <div class="profile-form-area">
+                <form method="POST" enctype="multipart/form-data" class="premium-form-grid">
+                    {% csrf_token %}
+                    
+                    <div class="form-section-premium">
+                        <div class="section-title-premium">
+                            <span class="section-icon"><i class="fas fa-user-circle"></i></span>
+                            <h4>Personal Information</h4>
+                        </div>
+                        <div class="form-fields-grid">
+                            {% for field in u_form %}
+                            <div class="premium-field-wrapper">
+                                <label class="premium-label">{{ field.label }}</label>
+                                <div class="premium-input-container">
+                                    {{ field }}
+                                    <span class="input-focus-line"></span>
+                                </div>
+                                {% if field.errors %}
+                                    <div class="premium-error">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-section-premium">
+                        <div class="section-title-premium">
+                            <span class="section-icon"><i class="fas fa-id-card"></i></span>
+                            <h4>Profile Details</h4>
+                        </div>
+                        <div class="form-fields-grid">
+                            {% for field in p_form %}
+                            <div class="premium-field-wrapper">
+                                <label class="premium-label">{{ field.label }}</label>
+                                <div class="premium-input-container">
+                                    {{ field }}
+                                    <span class="input-focus-line"></span>
+                                </div>
+                                {% if field.errors %}
+                                    <div class="premium-error">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-actions-premium">
+                        <button type="submit" class="btn-save-premium">
+                            <span class="save-glow"></span>
+                            <i class="fas fa-check-circle me-2"></i> Update My Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+

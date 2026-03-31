@@ -1,263 +1,311 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}🌾 Kisan AI - Get Free Crop Recommendations{% endblock %}
+{% block title %}🌾 Kisan AI - Smart Crop Advisor{% endblock %}
+
+{% block extra_head %}
+<style>
+/* ===== GSAP STACKED CARDS ===== */
+.stacked-cards-section {
+  background: var(--cream);
+  padding: 0;
+  overflow: visible;
+}
+
+.stacked-cards-header {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 100px 20px 60px;
+  text-align: center;
+}
+
+.stacked-cards-header .tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15,32,39,0.07);
+  color: var(--ink);
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.stacked-cards-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.stacked-cards-header .description {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.l-cards {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.c-card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0;
+  margin-bottom: 0;
+  width: 100%;
+  height: 85vh;
+  min-height: 600px;
+  background-color: white;
+  border: 1px solid rgba(15,32,39,0.1);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.c-card__description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px;
+}
+
+.c-card__tagline {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  margin-bottom: 16px;
+  letter-spacing: 0.1em;
+}
+
+.c-card__title {
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--ink);
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+
+.c-card__excerpt {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.c-card__cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.c-card__cta a {
+  width: max-content;
+  padding: 16px 36px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.c-card__cta a:hover {
+  background: var(--accent-green);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.c-card__figure {
+  position: relative;
+  overflow: hidden;
+}
+
+.c-card__figure img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spacer {
+  width: 100%;
+  height: 60vh;
+}
+
+@media (max-width: 992px) {
+  .c-card {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: auto;
+  }
+  .c-card__figure {
+    height: 300px;
+    order: -1;
+  }
+  .c-card__description {
+    padding: 40px;
+  }
+  .c-card__title {
+    font-size: 32px;
+  }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+
+<!-- ===== HERO ===== -->
 <section class="hero">
     <div class="hero-bg-pattern"></div>
-    <div class="hero-container">
-        <div class="hero-text">
-            <div class="hero-badge">
-                <span class="badge-dot"></span>
-                AI-Powered Agricultural Advisory
-            </div>
+    <div class="hero-container hero-centered">
+        <div class="hero-text hero-text-center">
             <h1 class="hero-title">
                 Smart Crop Advisor<br>
                 <span class="hero-title-hindi">स्मार्ट फसल सलाहकार</span>
             </h1>
-            <p class="hero-subtitle">
-                Get personalized crop recommendations powered by Google Gemini AI.<br>
-                Input your farm details and receive expert advice on best crops, yield estimates, mandi prices & farming calendar.
-            </p>
-            <p class="hero-subtitle-hindi">
-                अपनी जमीन की जानकारी डालें और पाएं सर्वोत्तम फसल की सलाह, उपज का अनुमान, मंडी कीमत और खेती कैलेंडर
-            </p>
-            <div class="hero-features">
-                <div class="hero-feature">
-                    <i class="fas fa-robot"></i>
-                    <span>Gemini AI</span>
-                </div>
-                <div class="hero-feature">
-                    <i class="fas fa-cloud-sun-rain"></i>
-                    <span>Live Weather</span>
-                </div>
-                <div class="hero-feature">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Mandi Prices</span>
-                </div>
-                <div class="hero-feature">
-                    <i class="fas fa-file-pdf"></i>
-                    <span>Bank Report</span>
-                </div>
-            </div>
-        </div>
-        <div class="hero-image">
-            <div class="floating-card card-1">
-                <i class="fas fa-seedling"></i>
-                <span>Best Crop Detected</span>
-                <strong>Wheat 🌾</strong>
-            </div>
-            <div class="floating-card card-2">
-                <i class="fas fa-rupee-sign"></i>
-                <span>Mandi Price</span>
-                <strong>₹2,275/Quintal</strong>
-            </div>
-            <div class="floating-card card-3">
-                <i class="fas fa-chart-bar"></i>
-                <span>Yield Estimate</span>
-                <strong>22-28 Quintals/Acre</strong>
-            </div>
-            <div class="hero-circle">
-                <span class="circle-emoji">🌾</span>
+            <p class="hero-subtitle">Empowering Indian farmers with real-time AI insights for better yield and fair pricing.</p>
+            <div class="hero-cta-group">
+                <a href="{% url 'advisor' %}" class="hero-btn-primary">
+                    <i class="fas fa-seedling"></i> Get Advised Now
+                </a>
+                <a href="#how-it-works" class="hero-btn-secondary">Learn More</a>
             </div>
         </div>
     </div>
-    <div class="hero-scroll-indicator">
-        <i class="fas fa-chevron-down"></i>
-    </div>
+    <div class="hero-scroll-indicator"><i class="fas fa-chevron-down"></i></div>
 </section>
 
-<!-- Input Form Section -->
-<section class="form-section" id="get-recommendation">
-    <div class="section-container">
-        <div class="section-header">
-            <h2 class="section-title">Get Your Crop Recommendation</h2>
-            <p class="section-subtitle">फसल सुझाव पाने के लिए अपनी जानकारी भरें</p>
-        </div>
-
-        <div class="form-card">
-            <div class="form-header">
-                <div class="form-step-indicator">
-                    <div class="step active" data-step="1">
-                        <span class="step-num">1</span>
-                        <span class="step-label">Location / स्थान</span>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" data-step="2">
-                        <span class="step-num">2</span>
-                        <span class="step-label">Farm Details / खेत</span>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" data-step="3">
-                        <span class="step-num">3</span>
-                        <span class="step-label">Language / भाषा</span>
-                    </div>
-                </div>
-            </div>
-
-            <form method="POST" action="{% url 'home' %}#get-recommendation" id="crop-form" novalidate>
-                {% csrf_token %}
-                
-                <div class="form-grid">
-                    <!-- Location -->
-                    <div class="form-group full-width">
-                        <label for="location-input" class="form-label">
-                            <i class="fas fa-map-marker-alt"></i>
-                            Location / स्थान <span class="required">*</span>
-                        </label>
-                        {{ form.location }}
-                        {% if form.location.errors %}
-                        <span class="form-error"><i class="fas fa-exclamation-circle"></i> {{ form.location.errors.0 }}</span>
-                        {% endif %}
-                        <div id="weather-preview" class="weather-preview hidden">
-                            <i class="fas fa-cloud-sun"></i>
-                            <span id="weather-text">Loading weather...</span>
-                        </div>
-                    </div>
-
-                    <!-- Soil Type -->
-                    <div class="form-group">
-                        <label for="soil-type-select" class="form-label">
-                            <i class="fas fa-layer-group"></i>
-                            Soil Type / मिट्टी का प्रकार <span class="required">*</span>
-                        </label>
-                        {{ form.soil_type }}
-                        {% if form.soil_type.errors %}
-                        <span class="form-error">{{ form.soil_type.errors.0 }}</span>
-                        {% endif %}
-                        <div class="soil-info" id="soil-info"></div>
-                    </div>
-
-                    <!-- Season -->
-                    <div class="form-group">
-                        <label for="season-select" class="form-label">
-                            <i class="fas fa-calendar-alt"></i>
-                            Season / ऋतु <span class="required">*</span>
-                        </label>
-                        {{ form.season }}
-                        {% if form.season.errors %}
-                        <span class="form-error">{{ form.season.errors.0 }}</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Water Availability -->
-                    <div class="form-group">
-                        <label for="water-select" class="form-label">
-                            <i class="fas fa-tint"></i>
-                            Water Availability / जल उपलब्धता <span class="required">*</span>
-                        </label>
-                        {{ form.water_availability }}
-                        {% if form.water_availability.errors %}
-                        <span class="form-error">{{ form.water_availability.errors.0 }}</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Land Area -->
-                    <div class="form-group">
-                        <label for="land-area-input" class="form-label">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                            Land Area / खेत का क्षेत्रफल (Acres)
-                        </label>
-                        {{ form.land_area }}
-                        {% if form.land_area.errors %}
-                        <span class="form-error">{{ form.land_area.errors.0 }}</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Language -->
-                    <div class="form-group language-group">
-                        <label class="form-label">
-                            <i class="fas fa-language"></i>
-                            Output Language / भाषा
-                        </label>
-                        <div class="lang-options">
-                            {% for choice in form.language %}
-                            <label class="lang-option">
-                                {{ choice.tag }}
-                                <span class="lang-label">
-                                    {% if choice.data.value == 'en' %}
-                                        🇬🇧 English
-                                    {% else %}
-                                        🇮🇳 हिंदी (Hindi)
-                                    {% endif %}
-                                </span>
-                            </label>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="form-submit">
-                    <button type="submit" class="btn-submit" id="submit-btn">
-                        <span class="btn-text">
-                            <i class="fas fa-robot"></i>
-                            Get AI Crop Recommendation / फसल सुझाव पाएं
-                        </span>
-                        <span class="btn-loading hidden">
-                            <div class="spinner"></div>
-                            AI is analyzing your farm... कृपया प्रतीक्षा करें...
-                        </span>
-                    </button>
-                    <p class="form-note">
-                        <i class="fas fa-shield-alt"></i>
-                        Your data is secure &amp; will be used only for recommendations
-                    </p>
-                </div>
-            </form>
+<!-- ===== STACKED CARDS SECTION ===== -->
+<section class="stacked-cards-section">
+    <div class="stacked-cards-header" id="farm-gallery">
+        <div class="tagline"><i class="fas fa-images"></i> Farm Gallery</div>
+        <h2>🌾 Crop Landscapes</h2>
+        <div class="description">
+            Scroll through beautiful farming scenes from across India. Explore the diversity of our agricultural heritage.
         </div>
     </div>
+    
+    <div class="l-cards">
+        <!-- Crop Landscape 1 -->
+        <div class="c-card">
+            <div class="c-card__description">
+                <div class="c-card__tagline">Rabi Season</div>
+                <h1 class="c-card__title">Golden Wheat Fields</h1>
+                <div class="c-card__excerpt">
+                    Bountiful wheat harvest in the plains of North India. A testament to the hard work of our farmers and the richness of our soil.
+                </div>
+                <div class="c-card__cta">
+                    <a href="{% url 'advisor' %}">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <figure class="c-card__figure">
+                <img src="{% static 'images/landscape_wheat.jpg' %}" alt="Wheat Fields">
+            </figure>
+        </div>
+        
+        <!-- Crop Landscape 2 -->
+        <div class="c-card">
+            <div class="c-card__description">
+                <div class="c-card__tagline">Kharif Season</div>
+                <h1 class="c-card__title">Terraced Paddy Fields</h1>
+                <div class="c-card__excerpt">
+                    Lush green rice terraces in the Himalayan foothills. Witness the harmony of mountain farming and natural irrigation.
+                </div>
+                <div class="c-card__cta">
+                    <a href="{% url 'advisor' %}">Explore More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <figure class="c-card__figure">
+                <img src="{% static 'images/landscape_terraces.jpg' %}" alt="Paddy Fields">
+            </figure>
+        </div>
+
+        <!-- Crop Landscape 3 -->
+        <div class="c-card">
+            <div class="c-card__description">
+                <div class="c-card__tagline">Traditional Farming</div>
+                <h1 class="c-card__title">Traditional Rice Planting</h1>
+                <div class="c-card__excerpt">
+                    Farmers working together in the fields of South India. The collective spirit and ancient wisdom of Indian agriculture.
+                </div>
+                <div class="c-card__cta">
+                    <a href="{% url 'advisor' %}">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <figure class="c-card__figure">
+                <img src="{% static 'images/landscape_paddy_work.jpg' %}" alt="Rice Planting">
+            </figure>
+        </div>
+
+        <!-- Crop Landscape 4 -->
+        <div class="c-card">
+            <div class="c-card__description">
+                <div class="c-card__tagline">Heritage</div>
+                <h1 class="c-card__title">The Indian Farmer</h1>
+                <div class="c-card__excerpt">
+                    The silent hero of our nation. Dedicated to providing food for millions with resilience, pride, and hard work.
+                </div>
+                <div class="c-card__cta">
+                    <a href="{% url 'advisor' %}">Our Mission <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <figure class="c-card__figure">
+                <img src="{% static 'images/landscape_farmer.jpg' %}" alt="Indian Farmer">
+            </figure>
+        </div>
+    </div>
+
+    <div class="spacer"></div>
 </section>
 
-<!-- How It Works Section -->
-<section class="how-it-works">
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-it-works" id="how-it-works">
     <div class="section-container">
         <h2 class="section-title">How It Works / कैसे काम करता है</h2>
         <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-icon">📝</div>
-                <h3>1. Enter Farm Details</h3>
-                <p>खेत की जानकारी भरें: स्थान, मिट्टी, ऋतु, जल उपलब्धता</p>
-            </div>
+            <div class="step-card"><div class="step-icon">📝</div><h3>1. Enter Farm Details</h3><p>खेत की जानकारी भरें: स्थान, मिट्टी, ऋतु, जल उपलब्धता</p></div>
             <div class="step-arrow">→</div>
-            <div class="step-card">
-                <div class="step-icon">🤖</div>
-                <h3>2. AI Analysis</h3>
-                <p>Gemini AI analyzes weather, soil, and market data | एआई विश्लेषण करता है</p>
-            </div>
+            <div class="step-card"><div class="step-icon">🤖</div><h3>2. AI Analysis</h3><p>Gemini AI analyzes weather, soil, and market data | एआई विश्लेषण करता है</p></div>
             <div class="step-arrow">→</div>
-            <div class="step-card">
-                <div class="step-icon">📊</div>
-                <h3>3. Get Recommendations</h3>
-                <p>फसल सुझाव, उपज अनुमान, मंडी कीमत और कैलेंडर</p>
-            </div>
+            <div class="step-card"><div class="step-icon">📊</div><h3>3. Get Recommendations</h3><p>फसल सुझाव, उपज अनुमान, मंडी कीमत और कैलेंडर</p></div>
             <div class="step-arrow">→</div>
-            <div class="step-card">
-                <div class="step-icon">📄</div>
-                <h3>4. Download Report</h3>
-                <p>बैंक लोन के लिए PDF रिपोर्ट डाउनलोड करें</p>
-            </div>
+            <div class="step-card"><div class="step-icon">📄</div><h3>4. Download Report</h3><p>बैंक लोन के लिए PDF रिपोर्ट डाउनलोड करें</p></div>
         </div>
     </div>
 </section>
 
-<!-- Recent Queries -->
+<!-- ===== RECENT QUERIES ===== -->
 {% if recent_queries %}
-<section class="recent-section">
+<section class="recent-section" style="background: var(--dark-green); padding: 5rem 1.5rem;">
     <div class="section-container">
-        <h2 class="section-title">Recent Recommendations / हाल के सुझाव</h2>
-        <div class="recent-grid">
+        <h2 class="section-title" style="color: var(--hunter);">Recent Recommendations / हाल के सुझाव</h2>
+        <div class="horizontal-scroller">
             {% for q in recent_queries %}
-            <a href="{% url 'results' q.id %}" class="recent-card">
-                <div class="recent-icon">🌱</div>
-                <div class="recent-info">
+            <a href="{% url 'results' q.id %}" class="scroller-card">
+                <div class="scroller-icon">🌱</div>
+                <div class="scroller-info">
                     <strong>{{ q.location }}</strong>
                     <span>{{ q.get_soil_type_display }} · {{ q.get_season_display }}</span>
-                    <span class="recent-date">{{ q.created_at|date:"d M Y" }}</span>
+                    <span class="scroller-date">{{ q.created_at|date:"d M Y" }}</span>
                 </div>
-                <i class="fas fa-chevron-right"></i>
+                <i class="fas fa-arrow-right" style="color: var(--accent-bright); margin-left: auto;"></i>
             </a>
             {% endfor %}
         </div>
@@ -265,4 +313,80 @@
 </section>
 {% endif %}
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  window.addEventListener("load", function() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const cards = gsap.utils.toArray(".c-card");
+    const lastCardIndex = cards.length - 1;
+
+    // Create a main ScrollTrigger for the whole section to handle global effects if needed
+    const lastCardST = ScrollTrigger.create({
+      trigger: cards[cards.length - 1],
+      start: "center center"
+    });
+
+    cards.forEach((card, index) => {
+      const isLast = index === lastCardIndex;
+      const cardImage = card.querySelector(".c-card__figure img");
+      const cardContent = card.querySelector(".c-card__description");
+
+      // Main Timeline for each card
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: "top 80px",
+          end: () => isLast ? "bottom bottom" : lastCardST.start,
+          pin: true,
+          pinSpacing: false,
+          scrub: 1.2, // Increased scrub for smoothness
+          ease: "power2.inOut",
+        }
+      });
+
+      // 1. Zoom and Scale effect for the card itself
+      tl.to(card, {
+        scale: isLast ? 1 : 0.92,
+        opacity: isLast ? 1 : 0.7,
+        transformOrigin: "50% 5%",
+        duration: 1
+      }, 0);
+
+      // 2. Zoom effect for the IMAGE inside the card (Parallax-ish)
+      if (cardImage) {
+        tl.fromTo(cardImage, 
+          { scale: 1.0 }, 
+          { scale: 1.3, ease: "none", duration: 1 }, 
+          0
+        );
+      }
+
+      // 3. Subtle content fade/move
+      if (cardContent) {
+        tl.to(cardContent, {
+          y: isLast ? 0 : -30,
+          opacity: isLast ? 1 : 0.8,
+          duration: 1
+        }, 0);
+      }
+    });
+
+    // Add a smooth reveal for the header
+    gsap.from(".stacked-cards-header", {
+      scrollTrigger: {
+        trigger: ".stacked-cards-header",
+        start: "top 80%",
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1.2,
+      ease: "power3.out"
+    });
+  });
+});
+</script>
 {% endblock %}

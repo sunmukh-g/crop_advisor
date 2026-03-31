@@ -1,0 +1,207 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}🌾 Kisan AI - Get Free Crop Recommendations{% endblock %}
+
+{% block content %}
+
+<!-- ===== ADVISOR HERO ===== -->
+<section class="hero" style="min-height: 55vh;">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-container hero-centered">
+        <div class="hero-text hero-text-center">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                AI Crop Advisor — Powered by Google Gemini
+            </div>
+            <h1 class="hero-title">
+                Get Your AI<br>
+                <span class="hero-title-hindi">फसल सुझाव पाएं</span>
+            </h1>
+            <p class="hero-subtitle">
+                Fill in your farm details below and get personalized crop recommendations, mandi prices, yield estimates, and a downloadable bank report.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FORM SECTION ===== -->
+<section class="form-section" id="get-recommendation">
+    <div class="section-container">
+        <div class="section-header">
+            <h2 class="section-title">Get Your Crop Recommendation</h2>
+            <p class="section-subtitle">फसल सुझाव पाने के लिए अपनी जानकारी भरें</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-header">
+                <div class="form-step-indicator">
+                    <div class="step active" data-step="1">
+                        <span class="step-num">1</span>
+                        <span class="step-label">Location / स्थान</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <span class="step-num">2</span>
+                        <span class="step-label">Farm Details / खेत</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <span class="step-num">3</span>
+                        <span class="step-label">Language / भाषा</span>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="{% url 'advisor' %}" id="crop-form" novalidate>
+                {% csrf_token %}
+
+                <div class="form-grid">
+                    <!-- Location -->
+                    <div class="form-group full-width">
+                        <label for="location-input" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Location / स्थान <span class="required">*</span>
+                        </label>
+                        {{ form.location }}
+                        {% if form.location.errors %}
+                        <span class="form-error"><i class="fas fa-exclamation-circle"></i> {{ form.location.errors.0 }}</span>
+                        {% endif %}
+                        <div id="weather-preview" class="weather-preview hidden">
+                            <i class="fas fa-cloud-sun"></i>
+                            <span id="weather-text">Loading weather...</span>
+                        </div>
+                    </div>
+
+                    <!-- Soil Type -->
+                    <div class="form-group">
+                        <label for="soil-type-select" class="form-label">
+                            <i class="fas fa-layer-group"></i>
+                            Soil Type / मिट्टी का प्रकार <span class="required">*</span>
+                        </label>
+                        {{ form.soil_type }}
+                        {% if form.soil_type.errors %}
+                        <span class="form-error">{{ form.soil_type.errors.0 }}</span>
+                        {% endif %}
+                        <div class="soil-info" id="soil-info"></div>
+                    </div>
+
+                    <!-- Season -->
+                    <div class="form-group">
+                        <label for="season-select" class="form-label">
+                            <i class="fas fa-calendar-alt"></i>
+                            Season / ऋतु <span class="required">*</span>
+                        </label>
+                        {{ form.season }}
+                        {% if form.season.errors %}
+                        <span class="form-error">{{ form.season.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Water Availability -->
+                    <div class="form-group">
+                        <label for="water-select" class="form-label">
+                            <i class="fas fa-tint"></i>
+                            Water Availability / जल उपलब्धता <span class="required">*</span>
+                        </label>
+                        {{ form.water_availability }}
+                        {% if form.water_availability.errors %}
+                        <span class="form-error">{{ form.water_availability.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Land Area -->
+                    <div class="form-group">
+                        <label for="land-area-input" class="form-label">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Land Area / खेत का क्षेत्रफल (Acres)
+                        </label>
+                        {{ form.land_area }}
+                        {% if form.land_area.errors %}
+                        <span class="form-error">{{ form.land_area.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Language -->
+                    <div class="form-group language-group">
+                        <label class="form-label">
+                            <i class="fas fa-language"></i>
+                            Output Language / भाषा
+                        </label>
+                        <div class="lang-options">
+                            {% for choice in form.language %}
+                            <label class="lang-option">
+                                {{ choice.tag }}
+                                <span class="lang-label">
+                                    {% if choice.data.value == 'en' %}
+                                        🇬🇧 English
+                                    {% else %}
+                                        🇮🇳 हिंदी (Hindi)
+                                    {% endif %}
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="form-submit">
+                    <button type="submit" class="btn-submit" id="submit-btn">
+                        <span class="btn-text">
+                            <i class="fas fa-robot"></i>
+                            Get AI Crop Recommendation / फसल सुझाव पाएं
+                        </span>
+                        <span class="btn-loading hidden">
+                            <div class="spinner"></div>
+                            AI is analyzing your farm... कृपया प्रतीक्षा करें...
+                        </span>
+                    </button>
+                    <p class="form-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Your data is secure &amp; will be used only for recommendations
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Weather preview on location blur
+const locInput = document.getElementById('id_location');
+const weatherDiv = document.getElementById('weather-preview');
+const weatherText = document.getElementById('weather-text');
+if (locInput) {
+    locInput.addEventListener('blur', function() {
+        const loc = this.value.trim();
+        if (!loc) return;
+        weatherDiv && weatherDiv.classList.remove('hidden');
+        if (weatherText) weatherText.textContent = 'Fetching weather for ' + loc + '...';
+        fetch('/api/weather/?location=' + encodeURIComponent(loc))
+            .then(r => r.json())
+            .then(d => {
+                if (d.temperature !== undefined && weatherText) {
+                    weatherText.textContent = `🌤 ${d.temperature}°C, ${d.description || ''} — ${d.humidity || ''}% humidity`;
+                }
+            }).catch(() => {
+                if (weatherText) weatherText.textContent = 'Weather unavailable.';
+            });
+    });
+}
+
+// Submit loading state
+const form = document.getElementById('crop-form');
+const submitBtn = document.getElementById('submit-btn');
+if (form && submitBtn) {
+    form.addEventListener('submit', function() {
+        submitBtn.querySelector('.btn-text').classList.add('hidden');
+        submitBtn.querySelector('.btn-loading').classList.remove('hidden');
+        submitBtn.disabled = true;
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="dashboard-container">
+        <!-- Modern Header -->
+        <div class="dashboard-header">
+            <span class="header-pre">FARMER DASHBOARD</span>
+            <h1 class="header-main">Welcome Back, {{ user.first_name|default:user.username }}</h1>
+            <div class="header-bar"></div>
+        </div>
+
+        <div class="dashboard-grid-main">
+            <!-- Left: Profile Summary -->
+            <div class="dashboard-sidebar">
+                <div class="premium-profile-card">
+                    <div class="pp-card-header">
+                        <div class="pp-avatar-wrapper">
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="pp-avatar-img">
+                        </div>
+                        <h3 class="pp-username">{{ user.username }}</h3>
+                        <p class="pp-date">Since {{ user.date_joined|date:"M Y" }}</p>
+                    </div>
+                    <div class="pp-card-stats">
+                        <div class="pp-stat-item">
+                            <span class="pp-stat-label"><i class="fas fa-seedling"></i> Queries</span>
+                            <span class="pp-stat-value">{{ user_queries.count }}</span>
+                        </div>
+                        <div class="pp-stat-divider"></div>
+                        <a href="{% url 'profile' %}" class="pp-edit-btn">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Recent Activity -->
+            <div class="dashboard-content">
+                <div class="premium-activity-card">
+                    <div class="pa-header">
+                        <h2><i class="fas fa-history"></i> Recent Recommendations</h2>
+                    </div>
+                    
+                    {% if user_queries %}
+                    <div class="pa-table-container">
+                        <table class="pa-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Soil & Season</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for query in user_queries %}
+                                <tr>
+                                    <td>
+                                        <div class="pa-date-info">
+                                            <strong>{{ query.created_at|date:"d M" }}</strong>
+                                            <span>{{ query.created_at|date:"Y" }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="pa-loc-info">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>{{ query.location }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="pa-meta-info">
+                                            <span class="meta-tag soil">{{ query.get_soil_type_display }}</span>
+                                            <span class="meta-tag season">{{ query.get_season_display }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{% url 'results' query.id %}" class="pa-view-btn">
+                                            View <i class="fas fa-chevron-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="pa-empty-state">
+                        <div class="empty-icon"><i class="fas fa-leaf"></i></div>
+                        <h4>No recommendations yet</h4>
+                        <p>Start your first AI-powered crop analysis to see history here.</p>
+                        <a href="{% url 'advisor' %}" class="pa-start-btn">Get Started</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+

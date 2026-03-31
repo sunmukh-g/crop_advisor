@@ -6,6 +6,29 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // ============================================
+    // Navbar Mobile Toggle (PRIORITY)
+    // ============================================
+    const navToggle = document.getElementById('nav-toggle');
+    const navbarWrapper = document.querySelector('.navbar-wrapper');
+    const navMenuLinks = document.querySelectorAll('.nav-container-main .nav-link');
+
+    if (navToggle && navbarWrapper) {
+        navToggle.addEventListener('click', function() {
+            console.log('Navbar toggle clicked'); // Debugging
+            navbarWrapper.classList.toggle('navbar--open');
+            document.body.classList.toggle('no-scroll');
+        });
+
+        navMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navbarWrapper.classList.remove('navbar--open');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+    }
+
+    // ============================================
+
     // Submit button loader
     // ============================================
     const form = document.getElementById('crop-form');
@@ -166,4 +189,27 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 3000);
         });
     }
+
+    // ============================================
+    // Navbar hide on scroll down, show on scroll up
+    // ============================================
+    const navbar = document.querySelector('.navbar-wrapper');
+    if (navbar) {
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navbar.classList.add('navbar--hidden');
+            } else if (currentScrollY < lastScrollY) {
+                navbar.classList.remove('navbar--hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+    }
 });
+
+
+

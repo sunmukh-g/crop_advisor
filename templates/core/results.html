@@ -3,6 +3,101 @@
 
 {% block title %}🌾 Crop Recommendations for {{ query.location }} - Kisan AI{% endblock %}
 
+{% block extra_head %}
+<style>
+/* Animated Download Button */
+.animated-download-btn {
+	width: 100%;
+    max-width: 380px;
+	height: 50px;
+
+	background: var(--dark-green);
+	border: 3px solid var(--dark-green);
+
+	border-radius: 50px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-decoration: none;
+    position: relative;
+    outline: none;
+    margin: 10px 0;
+    box-shadow: 0 4px 16px rgba(15, 32, 39, 0.15);
+}
+
+.animated-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 32, 39, 0.25);
+    background: var(--mid-green, #1e3d2b);
+    border-color: var(--mid-green, #1e3d2b);
+}
+
+.animated-download-btn.short {
+    width: 250px;
+}
+
+.animated-download-btn span {
+	position: absolute;
+	color: var(--cream);
+
+	text-transform: uppercase;
+	letter-spacing: 1px;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+}
+
+.animated-download-btn svg {
+	position: absolute;
+	fill: transparent;
+    transition: fill 0.3s;
+}
+
+.animated-download-btn.is-animating {
+	outline: none;
+    background: transparent;
+	border: 3px solid transparent;
+	width: 50px;
+	border-left: 3px solid var(--accent-green, #3d7a56);
+	border-bottom: 3px solid var(--accent-green, #3d7a56);
+	animation: animated-btn-spin 2s 500ms forwards;
+    box-shadow: none;
+    pointer-events: none; /* Safe to use here since the click is already registered! */
+}
+
+.animated-download-btn.is-animating span {
+	opacity: 0;
+}
+
+.animated-download-btn.is-animating svg {
+	animation: animated-btn-check 500ms 2300ms forwards;
+}
+
+@keyframes animated-btn-spin {
+	80% {
+		border: 3px solid transparent;
+		border-left: 3px solid var(--accent-green, #3d7a56);
+	}
+	100% {
+		transform: rotate(1080deg);
+		border: 3px solid var(--accent-green, #3d7a56);
+	}
+}
+
+@keyframes animated-btn-check {
+	to {
+		fill: var(--accent-green, #3d7a56);
+	}
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="results-page">
     <!-- Results Header -->
@@ -21,9 +116,11 @@
                 <span class="pill"><i class="fas fa-expand-arrows-alt"></i> {{ query.land_area }} acres</span>
             </div>
             <div class="results-actions">
-                <a href="{% url 'download_report' query.id %}" class="btn btn-primary btn-download" id="download-btn">
-                    <i class="fas fa-file-pdf"></i>
-                    Download PDF Report / रिपोर्ट डाउनलोड करें
+                <a href="{% url 'download_report' query.id %}" class="animated-download-btn" id="download-btn">
+                    <span><i class="fas fa-file-pdf"></i> Download PDF Report / रिपोर्ट डाउनलोड करें</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/>
+                    </svg>
                 </a>
                 <a href="{% url 'view_report' query.id %}" class="btn btn-outline" target="_blank">
                     <i class="fas fa-eye"></i> Preview Report
@@ -271,9 +368,11 @@
                     <span><i class="fas fa-check"></i> Mandi Prices</span>
                 </div>
             </div>
-            <a href="{% url 'download_report' query.id %}" class="btn btn-primary btn-large">
-                <i class="fas fa-download"></i>
-                Download PDF Report
+            <a href="{% url 'download_report' query.id %}" class="animated-download-btn short" style="margin-top: 15px;">
+                <span><i class="fas fa-download"></i> Download PDF Report</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/>
+                </svg>
             </a>
         </div>
 
@@ -283,6 +382,19 @@
 
 {% block extra_scripts %}
 <script>
+// Animate Download Button on Click without interrupting the href execution
+document.querySelectorAll('.animated-download-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        // We do not run e.preventDefault() so the PDF downloads natively
+        this.classList.add('is-animating');
+        
+        // Reset the button after 4 seconds to allow clicking again later
+        setTimeout(() => {
+            this.classList.remove('is-animating');
+        }, 4000);
+    });
+});
+
 // Animate crop cards on scroll
 const cards = document.querySelectorAll('.crop-card');
 const observer = new IntersectionObserver((entries) => {

@@ -1,17 +1,29 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Login - Kisan AI{% endblock %}
+{% block title %}Login — Kisan AI{% endblock %}
+
+{% block navbar %}{% endblock %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">Login to Kisan AI</h2>
-    <form method="POST">
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-logo">🌾</div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to your Kisan AI account</p>
+    </div>
+    <div class="auth-card-body">
+      <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 15px;">Login</button>
-    </form>
-    <div style="text-align: center; margin-top: 20px;">
-        <p>Don't have an account? <a href="{% url 'register' %}" style="color: #27ae60; text-decoration: none; font-weight: bold;">Register here</a></p>
+        <button type="submit" class="auth-submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
     </div>
+    <div class="auth-footer">
+      Don't have an account? <a href="{% url 'register' %}">Register here</a>
+    </div>
+  </div>
 </div>
 {% endblock content %}

@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 import json
 
 
 class FarmerQuery(models.Model):
     """Stores farmer input data for crop recommendation"""
+    
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='queries')
     
     SOIL_CHOICES = [
         ('loamy', 'Loamy / दोमट'),

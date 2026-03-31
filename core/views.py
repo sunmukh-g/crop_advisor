@@ -15,20 +15,18 @@ from .services.report_service import generate_pdf_report
 logger = logging.getLogger(__name__)
 
 
-def home_view(request):
-    """Home page with farmer input form"""
+def advisor_view(request):
+    """Advisor page — crop recommendation form (separate from home page)"""
     if request.method == 'POST':
         form = FarmerInputForm(request.POST)
         if form.is_valid():
-            # Save farmer query
-            query = form.save()
-            
-            # Fetch weather data
+            query = form.save(commit=False)
+            if request.user.is_authenticated:
+                query.user = request.user
+            query.save()
             weather_data = get_weather_data(query.location)
             query.weather_data = weather_data
             query.save()
-            
-            # Prepare farmer data for AI
             farmer_data = {
                 'location': query.location,
                 'soil_type': query.soil_type,
@@ -36,12 +34,8 @@ def home_view(request):
                 'water_availability': query.water_availability,
                 'land_area': query.land_area,
             }
-            
-            # Get AI recommendations
             ai_result = get_crop_recommendations(farmer_data, weather_data, query.language)
-            
-            # Save recommendation
-            recommendation = CropRecommendation.objects.create(
+            CropRecommendation.objects.create(
                 query=query,
                 summary=ai_result.get('summary', ''),
                 crops_data=ai_result.get('crops', []),
@@ -49,21 +43,21 @@ def home_view(request):
                 calendar_data=ai_result.get('seasonal_calendar', []),
                 farming_tips=ai_result.get('farming_tips', ''),
             )
-            
             return redirect('results', query_id=query.id)
         else:
-            # Form has errors
-            return render(request, 'core/home.html', {'form': form})
+            return render(request, 'core/advisor.html', {'form': form})
     else:
         form = FarmerInputForm()
-    
-    # Get recent queries for display
+    return render(request, 'core/advisor.html', {'form': form})
+
+
+def home_view(request):
+    """Home page — gallery + how it works + recent queries"""
     recent_queries = FarmerQuery.objects.filter(
         recommendation__isnull=False
     ).select_related('recommendation')[:5]
-    
+
     return render(request, 'core/home.html', {
-        'form': form,
         'recent_queries': recent_queries,
     })
 
@@ -249,7 +243,7 @@ def api_crop_recommendation_create_view(request):
     water_availability = payload.get('water_availability')
 
     # Create query record first (so recommendation is linked)
-    query = FarmerQuery.objects.create(
+    query = FarmerQuery(
         location=location,
         soil_type=soil_type,
         season=season,
@@ -257,6 +251,9 @@ def api_crop_recommendation_create_view(request):
         land_area=land_area,
         language=language,
     )
+    if request.user.is_authenticated:
+        query.user = request.user
+    query.save()
 
     # Fetch weather and generate AI recommendation (Gemini may fall back to mock)
     weather_data = get_weather_data(location)

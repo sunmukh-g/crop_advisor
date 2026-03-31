@@ -8,33 +8,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 12px; color: #222; background: #f5f5f5; }
+        body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 12px; color: #253D2C; background: #CFFFDC; }
+
         .report-page { max-width: 21cm; margin: 0 auto; background: white; padding: 1.5cm; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
         
         /* Header */
-        .report-header { text-align: center; border-bottom: 3px solid #2d7a2d; padding-bottom: 15px; margin-bottom: 20px; }
-        .report-logo { font-size: 28px; font-weight: 800; color: #2d7a2d; }
-        .report-logo span { background: #2d7a2d; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 5px; }
+        .report-header { text-align: center; border-bottom: 3px solid #2E6F40; padding-bottom: 15px; margin-bottom: 20px; }
+        .report-logo { font-size: 28px; font-weight: 800; color: #2E6F40; }
+        .report-logo span { background: #2E6F40; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 5px; }
+
         .report-title { font-size: 16px; color: #444; margin-top: 5px; }
         .report-date { font-size: 11px; color: #888; margin-top: 3px; }
         
         /* Section */
         .section { margin-bottom: 20px; }
-        .section-title { background: #2d7a2d; color: white; padding: 6px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; margin-bottom: 10px; }
+        .section-title { background: #2E6F40; color: white; padding: 6px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; margin-bottom: 10px; }
+
         
         /* Info Tables */
         table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        th { background: #f0f8f0; color: #2d7a2d; font-weight: 700; padding: 6px 10px; text-align: left; border: 1px solid #d0e8d0; font-size: 11px; }
+        th { background: #e6ffef; color: #2E6F40; font-weight: 700; padding: 6px 10px; text-align: left; border: 1px solid #d0e8d0; font-size: 11px; }
+
         td { padding: 6px 10px; border: 1px solid #e0e0e0; font-size: 11px; }
         tr:nth-child(even) { background: #fafafa; }
         
         /* Crop Cards */
         .crop-section { border: 1.5px solid #d0e8d0; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
-        .crop-name { font-size: 14px; font-weight: 700; color: #2d7a2d; }
+        .crop-name { font-size: 14px; font-weight: 700; color: #2E6F40; }
         .crop-hindi { font-size: 13px; color: #555; }
-        .confidence { float: right; background: #2d7a2d; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; }
+        .confidence { float: right; background: #2E6F40; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; }
+
         .crop-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-        .detail-box { background: #f0f8f0; padding: 6px; border-radius: 4px; text-align: center; }
+        .detail-box { background: #e6ffef; padding: 6px; border-radius: 4px; text-align: center; }
+
         .detail-label { font-size: 10px; color: #888; }
         .detail-value { font-size: 11px; font-weight: 600; color: #222; }
         
@@ -46,7 +52,8 @@
         /* Calendar */
         .calendar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
         .cal-card { border: 1px solid #d0e8d0; border-radius: 4px; padding: 6px; font-size: 10px; }
-        .cal-month { font-weight: 700; color: #2d7a2d; font-size: 11px; }
+        .cal-month { font-weight: 700; color: #2E6F40; font-size: 11px; }
+
         .cal-stage { color: #888; font-size: 10px; margin: 2px 0; font-style: italic; }
         .cal-activity { color: #444; }
         
@@ -59,13 +66,52 @@
             .no-print { display: none !important; }
             .report-page { box-shadow: none; }
         }
+
+        /* Screen-specific responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .report-page {
+                padding: 15px;
+                max-width: 100%;
+            }
+            .crop-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .no-print {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .no-print div {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+            .no-print button, .no-print a {
+                margin: 0 !important;
+                width: 100%;
+                text-align: center;
+            }
+            /* Table responsiveness */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div class="no-print" style="background:#2d7a2d;color:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+    <div class="no-print" style="background:#2E6F40;color:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+
         <strong>🌾 Kisan AI - Report Preview</strong>
         <div>
-            <button onclick="window.print()" style="background:white;color:#2d7a2d;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;margin-right:10px;">🖨️ Print</button>
+            <button onclick="window.print()" style="background:white;color:#2E6F40;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;margin-right:10px;">🖨️ Print</button>
+
             <a href="{% url 'download_report' query.id %}" style="background:#f5a623;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;font-weight:600;">📥 Download PDF</a>
             <a href="{% url 'results' query.id %}" style="background:transparent;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;margin-left:8px;">← Back</a>
         </div>

@@ -1,18 +1,30 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Logout - Kisan AI{% endblock %}
+{% block title %}Sign Out — Kisan AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
-    <h2 style="color: #c0392b; margin-bottom: 20px;"><i class="fas fa-sign-out-alt"></i> Sign Out</h2>
-    <p style="margin-bottom: 25px; font-size: 1.1rem; color: #34495e;">Are you sure you want to log out of Kisan AI?</p>
-    
-    <form method="POST">
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-logo">👋</div>
+      <h2>Sign Out</h2>
+      <p>See you next time, {{ user.username }}!</p>
+    </div>
+    <div class="logout-card-body">
+      <div class="logout-icon">🌾</div>
+      <p class="logout-text">Are you sure you want to log out of Kisan AI?</p>
+      <form method="POST">
         {% csrf_token %}
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a href="{% url 'home' %}" class="btn" style="background: #ecf0f1; color: #2c3e50; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Cancel</a>
-            <button class="btn btn-primary" type="submit" style="background: #e74c3c; border-color: #e74c3c; padding: 10px 20px;">Yes, Log Out</button>
+        <div class="logout-btns">
+          <a href="{% url 'home' %}" class="btn-cancel">
+            <i class="fas fa-arrow-left"></i> Stay
+          </a>
+          <button type="submit" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Yes, Log Out
+          </button>
         </div>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock content %}
