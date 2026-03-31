@@ -8,10 +8,12 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            from django.contrib.auth import login
+            login(request, user)
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}! You can now log in.')
-            return redirect('login')
+            messages.success(request, f'Welcome to Kisan AI, {username}! Your account has been created.')
+            return redirect('home')
     else:
         form = UserRegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
