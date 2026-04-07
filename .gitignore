@@ -1,0 +1,20 @@
+# Environment variables (VERY IMPORTANT)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Django stuff
+db.sqlite3
+
+# Static & media files
+media/
+staticfiles/
+
+# Virtual environment
+venv/
+env/
+
+# VS Code settings (optional)
+.vscode/
