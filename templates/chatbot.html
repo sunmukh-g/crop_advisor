@@ -285,6 +285,9 @@
 
     <div class="input-area">
         <input type="text" id="message-input" placeholder="Type your question...">
+        
+        <button id="mic-btn">🎤</button>
+        
         <button id="send-btn" aria-label="Send message">
             <svg viewBox="0 0 24 24">
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
@@ -298,6 +301,53 @@
         const inputField = document.getElementById("message-input");
         const sendBtn = document.getElementById("send-btn");
         const chatBox = document.getElementById("chat-box");
+        const micBtn = document.getElementById("mic-btn");
+
+        let recognition;
+        let isRecording = false;
+
+        // check browser support
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = "en-IN"; // can change later
+            recognition.interimResults = false;
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                inputField.value = transcript;
+
+                // auto send after speaking
+                //sendMessage();
+            };
+
+            recognition.onerror = function(event) {
+                console.log("Speech error:", event.error);
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                micBtn.textContent = "🎤";
+            };
+        }
+
+        // mic button click
+        micBtn.addEventListener("click", () => {
+            if (!recognition) {
+                alert("Speech recognition not supported in this browser");
+                return;
+            }
+
+            if (!isRecording) {
+                recognition.start();
+                isRecording = true;
+                micBtn.textContent = "⏸️"; // pause icon
+            } else {
+                recognition.stop();
+                isRecording = false;
+                micBtn.textContent = "🎤";
+            }
+        });
 
         window.fillInput = function(text) {
             inputField.value = text;

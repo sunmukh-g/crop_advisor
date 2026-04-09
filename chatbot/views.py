@@ -33,14 +33,14 @@ def chatbot_view(request):
 
             prompt = f"""
             You are an agriculture expert helping Indian farmers.
-            Answer in simple Hindi 
+            Answer in simple sentences.  
             Always use a gender-neutral greeting.
             User: {msg}
             """
 
             
             response = client.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=prompt
             )
 
