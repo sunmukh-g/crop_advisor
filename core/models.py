@@ -71,6 +71,7 @@ class CropRecommendation(models.Model):
     calendar_data = models.JSONField(default=list)          # Seasonal calendar
     farming_tips = models.TextField(blank=True)             # General tips
     summary = models.TextField(blank=True)                  # Overall summary
+    government_schemes_data = models.JSONField(default=list) # Recommended government schemes
     
     created_at = models.DateTimeField(auto_now_add=True)
     

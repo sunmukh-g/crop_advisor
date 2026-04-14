@@ -14,8 +14,96 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3.2">
     
+    <!-- EMERGENCY NAVBAR CSS (Fail-safe) -->
+    <style>
+        :root {
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --nav-border: rgba(46, 111, 64, 0.2);
+            --nav-text: #253D2C;
+            --nav-accent: #2E6F40;
+        }
+
+        .navbar-wrapper {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            padding: 0 40px;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1400px;
+            pointer-events: none;
+        }
+
+        .nav-pill {
+            pointer-events: auto;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--nav-border);
+            padding: 8px 20px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--nav-text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(46, 111, 64, 0.1);
+            color: var(--nav-accent);
+        }
+
+        .nav-brand-center {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-brand-center img {
+            height: 45px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-brand-center:hover {
+            transform: scale(1.05);
+        }
+
+        .logout-btn-text {
+            color: #d63031 !important;
+        }
+
+        /* Mobile specific emergency rules */
+        @media (max-width: 991px) {
+            .navbar-wrapper { top: 0; padding: 15px; background: white; border-bottom: 2px solid var(--nav-accent); }
+            .desktop-only { display: none !important; }
+            .nav-container-main { pointer-events: auto; }
+        }
+    </style>
+
     <!-- GSAP -->
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
@@ -27,8 +115,8 @@
     <!-- Navbar -->
     {% block navbar %}
     <header class="navbar-wrapper">
-        <a href="{% url 'home' %}" class="nav-brand-mobile">
-            <img src="{% static 'images/kisan_logo_v2.png' %}" alt="Kisan AI Logo">
+        <a href="{% url 'home' %}" class="nav-brand-mobile mobile-only" style="z-index: 10001;">
+            <img src="{% static 'images/kisan_logo_v2.png' %}" alt="Kisan AI Logo" style="height: 35px;">
         </a>
 
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
@@ -39,11 +127,12 @@
 
         <div class="nav-container-main" id="nav-menu">
             <nav class="nav-pill nav-pill-left">
-                <a href="{% url 'home' %}" class="nav-link mobile-only">Home</a>
-                <a href="{% url 'home' %}" class="nav-link desktop-only"><i class="fas fa-ellipsis-v" style="margin-right: 4px;"></i> Menu</a>
-                <a href="{% url 'home' %}" class="nav-link desktop-only {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
                 <a href="{% url 'home' %}#farm-gallery" class="nav-link">Gallery</a>
                 <a href="{% url 'advisor' %}" class="nav-link {% if request.resolver_match.url_name == 'advisor' %}active{% endif %}">Advisor</a>
+                <a href="{% url 'help_center' %}" class="nav-link {% if request.resolver_match.url_name == 'help_center' %}active{% endif %}">
+                    <i class="fas fa-hand-holding-heart" style="font-size:0.8rem;"></i> Help
+                </a>
             </nav>
 
             <a href="{% url 'home' %}" class="nav-brand-center desktop-only">
@@ -55,10 +144,10 @@
                 <div class="nav-pill">
                     <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
                     <a href="{% url 'profile' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+                    <a href="{% url 'logout' %}" class="nav-link logout-btn-text">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
-                <a href="{% url 'logout' %}" class="nav-pill nav-pill-btn logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
                 {% else %}
                 <a href="{% url 'login' %}" class="nav-pill nav-pill-btn">Login</a>
                 <a href="{% url 'register' %}" class="nav-pill nav-pill-btn primary">

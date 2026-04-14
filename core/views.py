@@ -42,6 +42,7 @@ def advisor_view(request):
                 mandi_prices_data=ai_result.get('mandi_prices', []),
                 calendar_data=ai_result.get('seasonal_calendar', []),
                 farming_tips=ai_result.get('farming_tips', ''),
+                government_schemes_data=ai_result.get('government_schemes', []),
             )
             return redirect('results', query_id=query.id)
         else:
@@ -105,6 +106,7 @@ def results_view(request, query_id):
         'calendar': recommendation.calendar_data,
         'weather': query.weather_data,
         'tips': recommendation.farming_tips,
+        'schemes': recommendation.government_schemes_data,
     }
     
     return render(request, 'core/results.html', context)

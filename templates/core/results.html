@@ -337,11 +337,33 @@
             </div>
         </section>
 
+        <!-- ===== GOVERNMENT SCHEMES ===== -->
+        {% if schemes %}
+        <section class="results-section">
+            <div class="section-title-bar">
+                <h2><i class="fas fa-university"></i> Government Schemes / सरकारी योजनाएं</h2>
+                <p>Schemes you can benefit from based on your query</p>
+            </div>
+            <div class="schemes-grid">
+                {% for scheme in schemes %}
+                <div class="scheme-card">
+                    <div class="scheme-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="scheme-body">
+                        <h4>{{ scheme.name }}</h4>
+                        <p class="scheme-benefit"><strong>Benefit:</strong> {{ scheme.benefit }}</p>
+                        <p class="scheme-apply"><strong>How to Apply:</strong> {{ scheme.how_to_apply }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
         <!-- ===== FARMING TIPS ===== -->
         {% if tips %}
         <section class="results-section">
             <div class="section-title-bar">
-                <h2><i class="fas fa-lightbulb"></i> Farming Tips & Government Schemes / सुझाव और सरकारी योजनाएं</h2>
+                <h2><i class="fas fa-lightbulb"></i> Farming Tips / मुख्य सुझाव</h2>
             </div>
             <div class="tips-card">
                 {% for tip in tips.splitlines %}

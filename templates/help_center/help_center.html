@@ -1,0 +1,740 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}🆘 Help Center — Kisan AI{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ── Help Center Page ── */
+  .help-hero {
+    background: linear-gradient(135deg, #193D23 0%, #2E6F40 60%, #245732 100%);
+    padding: 7rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .help-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 20% 50%, rgba(207,255,220,.12) 0%, transparent 60%),
+                      radial-gradient(circle at 80% 20%, rgba(255,252,220,.08) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .help-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(207,255,220,.15);
+    border: 1px solid rgba(207,255,220,.3);
+    color: #CFFFDC;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .help-hero-badge .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 1.8s infinite;
+  }
+
+  .help-hero h1 {
+    font-family: 'Rationale', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: .6rem;
+  }
+
+  .help-hero p {
+    color: rgba(255,255,255,.72);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto 2rem;
+  }
+
+  /* Search bar */
+  .scheme-search-wrap {
+    max-width: 520px;
+    margin: 0 auto 1rem;
+    position: relative;
+  }
+
+  .scheme-search-wrap input {
+    width: 100%;
+    padding: .9rem 1.2rem .9rem 3rem;
+    border-radius: 50px;
+    border: none;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    font-size: .95rem;
+    outline: none;
+    transition: all .3s ease;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .scheme-search-wrap input::placeholder { color: rgba(255,255,255,.5); }
+  .scheme-search-wrap input:focus {
+    background: rgba(255,255,255,.22);
+    box-shadow: 0 0 0 3px rgba(207,255,220,.25);
+  }
+
+  .scheme-search-wrap .search-icon {
+    position: absolute;
+    left: 1rem; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,.6);
+    font-size: .95rem;
+  }
+
+  /* ── Categories ── */
+  .help-body {
+    padding: 3rem 2rem 5rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 2.5rem;
+    justify-content: center;
+  }
+
+  .cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: .55rem 1.2rem;
+    border-radius: 50px;
+    border: 1.5px solid rgba(46,111,64,.25);
+    background: #fff;
+    color: #253D2C;
+    font-size: .83rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .cat-btn:hover, .cat-btn.active {
+    background: #2E6F40;
+    border-color: #2E6F40;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46,111,64,.3);
+  }
+
+  /* ── Schemes Grid ── */
+  .schemes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.6rem;
+  }
+
+  .scheme-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1.5px solid rgba(46,111,64,.1);
+    box-shadow: 0 4px 24px rgba(37,61,44,.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s ease, box-shadow .3s ease;
+    animation: cardIn .5s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scheme-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(37,61,44,.16);
+  }
+
+  .scheme-card-header {
+    padding: 1.4rem 1.5rem 1rem;
+    background: linear-gradient(135deg, #f0fbf3 0%, #e8f8ed 100%);
+    border-bottom: 1px solid rgba(46,111,64,.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .scheme-emoji {
+    font-size: 2.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .scheme-header-text { flex: 1; min-width: 0; }
+
+  .scheme-name {
+    font-weight: 800;
+    font-size: 1rem;
+    color: #193D23;
+    line-height: 1.3;
+    margin-bottom: .2rem;
+  }
+
+  .scheme-hindi {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-size: .78rem;
+    color: #2E6F40;
+    font-weight: 600;
+  }
+
+  .scheme-meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-top: .5rem;
+  }
+
+  .meta-tag {
+    font-size: .7rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  .meta-tag.cat-financial  { background: #fef3c7; color: #92400e; }
+  .meta-tag.cat-insurance  { background: #dbeafe; color: #1e40af; }
+  .meta-tag.cat-irrigation { background: #cffafe; color: #155e75; }
+  .meta-tag.cat-soil       { background: #fce7f3; color: #9d174d; }
+  .meta-tag.cat-technology { background: #ede9fe; color: #5b21b6; }
+  .meta-tag.cat-credit     { background: #fef9c3; color: #713f12; }
+  .meta-tag.cat-market     { background: #d1fae5; color: #065f46; }
+  .meta-tag.cat-default    { background: #f3f4f6; color: #374151; }
+  .meta-tag.year-tag       { background: rgba(46,111,64,.1); color: #2E6F40; }
+  .meta-tag.active-tag     { background: #d1fae5; color: #065f46; }
+
+  .scheme-card-body {
+    padding: 1.2rem 1.5rem;
+    flex: 1;
+  }
+
+  .scheme-description {
+    font-size: .88rem;
+    color: #5A7A60;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+
+  .scheme-detail-row {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: .75rem;
+    font-size: .83rem;
+  }
+
+  .detail-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: #f0fbf3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2E6F40;
+    font-size: .75rem;
+    flex-shrink: 0;
+    margin-top: .1rem;
+  }
+
+  .detail-content { flex: 1; min-width: 0; }
+  .detail-label {
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #9ca3af;
+    margin-bottom: 1px;
+  }
+  .detail-value { color: #253D2C; font-weight: 500; line-height: 1.4; }
+
+  .scheme-card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(46,111,64,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .scheme-ministry {
+    font-size: .75rem;
+    color: #9ca3af;
+    flex: 1;
+    line-height: 1.3;
+  }
+  .scheme-ministry strong { color: #2E6F40; }
+
+  .scheme-apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .5rem 1.1rem;
+    background: #2E6F40;
+    color: #fff;
+    border-radius: 50px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all .25s ease;
+    white-space: nowrap;
+  }
+
+  .scheme-apply-btn:hover {
+    background: #193D23;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(46,111,64,.4);
+  }
+
+  /* ── Loading / Error States ── */
+  .loading-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    grid-column: 1 / -1;
+  }
+
+  .loading-spinner {
+    width: 56px; height: 56px;
+    border: 4px solid rgba(46,111,64,.15);
+    border-top-color: #2E6F40;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1.5rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-state h3 { color: #253D2C; font-size: 1.1rem; margin-bottom: .4rem; }
+  .loading-state p  { color: #9ca3af; font-size: .9rem; }
+
+  .error-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    grid-column: 1 / -1;
+  }
+
+  .error-state .error-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .error-state h3 { color: #d63031; margin-bottom: .5rem; }
+  .error-state p  { color: #9ca3af; font-size: .9rem; max-width: 400px; margin: 0 auto 1.5rem; }
+
+  .retry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: .75rem 1.8rem;
+    background: #2E6F40;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .retry-btn:hover {
+    background: #193D23;
+    transform: translateY(-2px);
+  }
+
+  /* ── Stats bar ── */
+  .schemes-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0 1.8rem;
+    flex-wrap: wrap;
+    gap: .75rem;
+  }
+
+  .stat-text {
+    font-size: .87rem;
+    color: #5A7A60;
+  }
+  .stat-count { font-weight: 800; color: #2E6F40; font-size: 1rem; }
+
+  .refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: .55rem 1.2rem;
+    background: rgba(46,111,64,.1);
+    color: #2E6F40;
+    border: none;
+    border-radius: 50px;
+    font-size: .83rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: 'Jost', sans-serif;
+  }
+  .refresh-btn:hover {
+    background: #2E6F40;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .refresh-btn .spin-icon { transition: transform .4s ease; }
+  .refresh-btn.loading .spin-icon { animation: spin 1s linear infinite; }
+
+  /* ── Floating Help Button (VAR) ── */
+  .help-fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .75rem;
+  }
+
+  .help-fab-tooltip {
+    background: #193D23;
+    color: #CFFFDC;
+    font-size: .78rem;
+    font-weight: 700;
+    padding: .45rem 1rem;
+    border-radius: 50px;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    animation: tooltipIn .35s ease;
+    pointer-events: none;
+  }
+
+  @keyframes tooltipIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .help-fab-btn {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2E6F40, #193D23);
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(46,111,64,.45);
+    transition: all .28s ease;
+    text-decoration: none;
+  }
+
+  .help-fab-btn:hover {
+    transform: scale(1.12) rotate(-8deg);
+    box-shadow: 0 12px 36px rgba(46,111,64,.55);
+  }
+
+  /* No results */
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    grid-column: 1 / -1;
+    color: #9ca3af;
+    font-size: .95rem;
+  }
+
+  @media (max-width: 768px) {
+    .schemes-grid { grid-template-columns: 1fr; }
+    .help-hero { padding: 6.5rem 1.5rem 3rem; }
+    .category-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: .5rem; }
+    .cat-btn { flex-shrink: 0; }
+    .schemes-stats { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="help-hero">
+  <div class="help-hero-badge">
+    <span class="live-dot"></span>
+    AI-Powered · Updated via Gemini
+  </div>
+  <h1>🌾 Government Schemes for Farmers</h1>
+  <p>Discover the latest Indian Government schemes designed to empower farmers — powered by Google Gemini AI.</p>
+
+  <div class="scheme-search-wrap">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="schemeSearch" placeholder="Search schemes..." autocomplete="off">
+  </div>
+</section>
+
+<!-- Body -->
+<div class="help-body">
+
+  <!-- Category Tabs -->
+  <div class="category-tabs" id="categoryTabs">
+    <button class="cat-btn active" data-cat="all">🌾 All Schemes</button>
+    <button class="cat-btn" data-cat="financial">💰 Financial Aid</button>
+    <button class="cat-btn" data-cat="insurance">🛡️ Insurance</button>
+    <button class="cat-btn" data-cat="credit">💳 Credit & Loans</button>
+    <button class="cat-btn" data-cat="irrigation">💧 Irrigation</button>
+    <button class="cat-btn" data-cat="soil">🌱 Soil & Seeds</button>
+    <button class="cat-btn" data-cat="technology">📱 Technology</button>
+    <button class="cat-btn" data-cat="market">🏪 Market Access</button>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="schemes-stats">
+    <p class="stat-text">
+      Showing <span class="stat-count" id="schemeCount">—</span> schemes for Indian Farmers
+    </p>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadSchemes()">
+      <i class="fas fa-sync-alt spin-icon"></i> Refresh
+    </button>
+  </div>
+
+  <!-- Schemes Grid -->
+  <div class="schemes-grid" id="schemesGrid">
+    <!-- Loading state on first load -->
+    <div class="loading-state" id="loadingState">
+      <div class="loading-spinner"></div>
+      <h3>Fetching Latest Schemes...</h3>
+      <p>Gemini AI is retrieving the most current government schemes for farmers.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Floating Help Button (VAB) -->
+<div class="help-fab" id="helpFab">
+  <div class="help-fab-tooltip" id="fabTooltip" style="display:none;">Back to Advisor</div>
+  <a href="{% url 'advisor' %}" class="help-fab-btn" id="fabBtn" title="Go to Crop Advisor">
+    🌾
+  </a>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  /* =============================================
+     Help Center — Government Schemes Logic
+  ============================================= */
+
+  let currentCategory = 'all';
+  let allSchemesData = [];
+  let searchQuery = '';
+
+  const grid = document.getElementById('schemesGrid');
+  const countEl = document.getElementById('schemeCount');
+  const searchInput = document.getElementById('schemeSearch');
+  const refreshBtn = document.getElementById('refreshBtn');
+
+  /* ── Category colour map ── */
+  const catClass = {
+    financial:  'cat-financial',
+    insurance:  'cat-insurance',
+    irrigation: 'cat-irrigation',
+    soil:       'cat-soil',
+    technology: 'cat-technology',
+    credit:     'cat-credit',
+    market:     'cat-market',
+  };
+
+  const catLabel = {
+    financial:  '💰 Financial',
+    insurance:  '🛡️ Insurance',
+    irrigation: '💧 Irrigation',
+    soil:       '🌱 Soil',
+    technology: '📱 Technology',
+    credit:     '💳 Credit',
+    market:     '🏪 Market',
+  };
+
+  /* ── Fetch from API ── */
+  async function loadSchemes(category = currentCategory) {
+    currentCategory = category;
+
+    // Show loading
+    grid.innerHTML = `
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <h3>Fetching Latest Schemes...</h3>
+        <p>Gemini AI is retrieving the most current government schemes for farmers.</p>
+      </div>`;
+    countEl.textContent = '—';
+    refreshBtn.classList.add('loading');
+
+    try {
+      const res = await fetch(`/help/api/schemes/?category=${category}`);
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.error || 'Unknown error');
+
+      allSchemesData = data.schemes;
+      renderSchemes(filterBySearch(allSchemesData));
+
+    } catch (err) {
+      grid.innerHTML = `
+        <div class="error-state">
+          <div class="error-icon">⚠️</div>
+          <h3>Failed to load schemes</h3>
+          <p>${err.message || 'Could not connect to Gemini AI. Please try again.'}</p>
+          <button class="retry-btn" onclick="loadSchemes()">
+            <i class="fas fa-redo"></i> Try Again
+          </button>
+        </div>`;
+      countEl.textContent = '0';
+    } finally {
+      refreshBtn.classList.remove('loading');
+    }
+  }
+
+  /* ── Filter by search ── */
+  function filterBySearch(schemes) {
+    if (!searchQuery) return schemes;
+    const q = searchQuery.toLowerCase();
+    return schemes.filter(s =>
+      (s.name || '').toLowerCase().includes(q) ||
+      (s.description || '').toLowerCase().includes(q) ||
+      (s.benefits || '').toLowerCase().includes(q) ||
+      (s.ministry || '').toLowerCase().includes(q)
+    );
+  }
+
+  /* ── Render schemes ── */
+  function renderSchemes(schemes) {
+    countEl.textContent = schemes.length;
+
+    if (schemes.length === 0) {
+      grid.innerHTML = `<div class="no-results">😔 No schemes found. Try a different category or search term.</div>`;
+      return;
+    }
+
+    grid.innerHTML = schemes.map((s, i) => buildCard(s, i)).join('');
+  }
+
+  /* ── Build single card HTML ── */
+  function buildCard(s, index) {
+    const cls = catClass[s.category] || 'cat-default';
+    const label = catLabel[s.category] || s.category;
+    const activeTag = s.is_active
+      ? `<span class="meta-tag active-tag">✅ Active</span>`
+      : `<span class="meta-tag" style="background:#fef2f2;color:#991b1b;">❌ Inactive</span>`;
+
+    const hindiLine = s.hindi_name
+      ? `<div class="scheme-hindi">${s.hindi_name}</div>` : '';
+
+    const link = s.official_link
+      ? `<a href="${escHtml(s.official_link)}" target="_blank" rel="noopener" class="scheme-apply-btn">
+           Apply Now <i class="fas fa-external-link-alt"></i>
+         </a>`
+      : `<span class="scheme-apply-btn" style="opacity:.5;cursor:default;">Info Only</span>`;
+
+    return `
+    <div class="scheme-card" style="animation-delay:${index * .07}s">
+      <div class="scheme-card-header">
+        <div class="scheme-emoji">${escHtml(s.icon || '🌾')}</div>
+        <div class="scheme-header-text">
+          <div class="scheme-name">${escHtml(s.name)}</div>
+          ${hindiLine}
+          <div class="scheme-meta-tags">
+            <span class="meta-tag ${cls}">${label}</span>
+            <span class="meta-tag year-tag">📅 ${escHtml(String(s.launch_year || 'N/A'))}</span>
+            ${activeTag}
+          </div>
+        </div>
+      </div>
+
+      <div class="scheme-card-body">
+        <p class="scheme-description">${escHtml(s.description)}</p>
+
+        <div class="scheme-detail-row">
+          <div class="detail-icon"><i class="fas fa-gift"></i></div>
+          <div class="detail-content">
+            <div class="detail-label">Benefits</div>
+            <div class="detail-value">${escHtml(s.benefits)}</div>
+          </div>
+        </div>
+
+        <div class="scheme-detail-row">
+          <div class="detail-icon"><i class="fas fa-user-check"></i></div>
+          <div class="detail-content">
+            <div class="detail-label">Eligibility</div>
+            <div class="detail-value">${escHtml(s.eligibility)}</div>
+          </div>
+        </div>
+
+        <div class="scheme-detail-row">
+          <div class="detail-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="detail-content">
+            <div class="detail-label">How to Apply</div>
+            <div class="detail-value">${escHtml(s.how_to_apply)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scheme-card-footer">
+        <div class="scheme-ministry">
+          <strong>${escHtml(s.ministry)}</strong>
+        </div>
+        ${link}
+      </div>
+    </div>`;
+  }
+
+  /* ── Helpers ── */
+  function escHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /* ── Category tabs ── */
+  document.getElementById('categoryTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    currentCategory = btn.dataset.cat;
+    loadSchemes(currentCategory);
+  });
+
+  /* ── Search ── */
+  searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value.trim();
+    if (allSchemesData.length) {
+      renderSchemes(filterBySearch(allSchemesData));
+    }
+  });
+
+  /* ── FAB tooltip ── */
+  const fabBtn = document.getElementById('fabBtn');
+  const fabTooltip = document.getElementById('fabTooltip');
+  fabBtn.addEventListener('mouseenter', () => { fabTooltip.style.display = 'block'; });
+  fabBtn.addEventListener('mouseleave', () => { fabTooltip.style.display = 'none'; });
+
+  /* ── Initial Load ── */
+  loadSchemes('all');
+</script>
+{% endblock %}
