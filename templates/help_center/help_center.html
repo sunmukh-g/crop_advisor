@@ -1,14 +1,23 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}🆘 Help Center — Kisan AI{% endblock %}
+{% block title %}🏛️ Government Schemes — Kisan AI{% endblock %}
 
 {% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Help Center Page ── */
+  /* ═══════════════════════════════════════════════
+     HELP CENTER — Premium Government Schemes UI
+     AI-Powered • Gemini Integrated • 2026 Edition
+  ═══════════════════════════════════════════════ */
+
+  body { background: #fafcfb; }
+
+  /* ── HERO SECTION ── */
   .help-hero {
-    background: linear-gradient(135deg, #193D23 0%, #2E6F40 60%, #245732 100%);
-    padding: 7rem 2rem 4rem;
+    background: linear-gradient(135deg, #0a1a0f 0%, #132a18 30%, #1a3d22 60%, #2E6F40 100%);
+    padding: 7rem 2rem 4.5rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -18,173 +27,416 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle at 20% 50%, rgba(207,255,220,.12) 0%, transparent 60%),
-                      radial-gradient(circle at 80% 20%, rgba(255,252,220,.08) 0%, transparent 55%);
+    background:
+      radial-gradient(ellipse at 25% 45%, rgba(74,222,128,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 25%, rgba(255,252,220,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(74,222,128,0.05) 0%, transparent 40%);
     pointer-events: none;
   }
 
-  .help-hero-badge {
+  /* Animated floating particles */
+  .help-hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      radial-gradient(2px 2px at 15% 25%, rgba(74,222,128,0.3), transparent),
+      radial-gradient(2px 2px at 85% 35%, rgba(74,222,128,0.2), transparent),
+      radial-gradient(1.5px 1.5px at 45% 75%, rgba(207,255,220,0.25), transparent),
+      radial-gradient(1.5px 1.5px at 65% 15%, rgba(207,255,220,0.2), transparent);
+    animation: floatParticles 20s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes floatParticles {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-15px) translateX(8px); }
+    100% { transform: translateY(0) translateX(0); }
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(207,255,220,.15);
-    border: 1px solid rgba(207,255,220,.3);
+    gap: 7px;
+    background: rgba(207,255,220,.12);
+    border: 1px solid rgba(207,255,220,.25);
     color: #CFFFDC;
-    padding: 6px 18px;
+    padding: 5px 16px;
     border-radius: 50px;
-    font-size: .78rem;
+    font-size: .72rem;
     font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
-    margin-bottom: 1.2rem;
   }
 
-  .help-hero-badge .live-dot {
+  .hero-badge .live-dot {
     width: 7px; height: 7px;
     border-radius: 50%;
     background: #4ade80;
     animation: pulse 1.8s infinite;
+    box-shadow: 0 0 6px rgba(74,222,128,0.5);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .6; transform: scale(1.3); }
+  }
+
+  .hero-badge.source-badge {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.15);
+    color: rgba(255,255,255,.7);
   }
 
   .help-hero h1 {
-    font-family: 'Rationale', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-family: 'Rationale', 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
     font-weight: 800;
     color: #fff;
-    line-height: 1.2;
-    margin-bottom: .6rem;
+    line-height: 1.15;
+    margin-bottom: .7rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,.3);
   }
 
-  .help-hero p {
-    color: rgba(255,255,255,.72);
+  .help-hero h1 .gradient-text {
+    background: linear-gradient(135deg, #4ade80, #86efac, #bbf7d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .help-hero p.hero-sub {
+    color: rgba(255,255,255,.65);
     font-size: 1.05rem;
-    max-width: 560px;
+    max-width: 600px;
     margin: 0 auto 2rem;
+    line-height: 1.6;
   }
 
-  /* Search bar */
-  .scheme-search-wrap {
-    max-width: 520px;
-    margin: 0 auto 1rem;
+  /* ── SEARCH BAR ── */
+  .hero-search-row {
+    display: flex;
+    gap: .75rem;
+    max-width: 640px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .search-wrap {
+    flex: 1;
     position: relative;
   }
 
-  .scheme-search-wrap input {
+  .search-wrap input {
     width: 100%;
     padding: .9rem 1.2rem .9rem 3rem;
-    border-radius: 50px;
-    border: none;
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    border: 1.5px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(16px);
     color: #fff;
-    font-size: .95rem;
+    font-size: .92rem;
     outline: none;
     transition: all .3s ease;
     font-family: 'Jost', sans-serif;
   }
 
-  .scheme-search-wrap input::placeholder { color: rgba(255,255,255,.5); }
-  .scheme-search-wrap input:focus {
-    background: rgba(255,255,255,.22);
-    box-shadow: 0 0 0 3px rgba(207,255,220,.25);
+  .search-wrap input::placeholder { color: rgba(255,255,255,.45); }
+  .search-wrap input:focus {
+    background: rgba(255,255,255,.18);
+    border-color: rgba(74,222,128,.5);
+    box-shadow: 0 0 0 3px rgba(74,222,128,.15);
   }
 
-  .scheme-search-wrap .search-icon {
+  .search-wrap .search-icon {
     position: absolute;
     left: 1rem; top: 50%;
     transform: translateY(-50%);
-    color: rgba(255,255,255,.6);
-    font-size: .95rem;
+    color: rgba(255,255,255,.5);
+    font-size: .9rem;
   }
 
-  /* ── Categories ── */
+  .state-select {
+    padding: .9rem 1.2rem;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(16px);
+    color: #fff;
+    font-size: .85rem;
+    outline: none;
+    font-family: 'Jost', sans-serif;
+    cursor: pointer;
+    min-width: 160px;
+    transition: all .3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='rgba(255,255,255,0.6)'%3E%3Cpath d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 2rem;
+  }
+
+  .state-select:focus {
+    border-color: rgba(74,222,128,.5);
+    box-shadow: 0 0 0 3px rgba(74,222,128,.15);
+  }
+
+  .state-select option { background: #1a2e1f; color: #fff; }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-item .stat-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #4ade80;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(74,222,128,0.3);
+  }
+
+  .stat-item .stat-label {
+    font-size: .7rem;
+    color: rgba(255,255,255,.5);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-top: 4px;
+  }
+
+  /* ── BODY ── */
   .help-body {
-    padding: 3rem 2rem 5rem;
-    max-width: 1300px;
+    background: #fafcfb;
+    padding: 2.5rem 2rem 5rem;
+    max-width: 1360px;
     margin: 0 auto;
   }
 
+  /* ── CATEGORY TABS ── */
   .category-tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: .6rem;
-    margin-bottom: 2.5rem;
+    gap: .5rem;
+    margin-bottom: 2rem;
     justify-content: center;
   }
 
   .cat-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: .55rem 1.2rem;
-    border-radius: 50px;
-    border: 1.5px solid rgba(46,111,64,.25);
+    gap: 6px;
+    padding: .5rem 1.1rem;
+    border-radius: 12px;
+    border: 1.5px solid rgba(46,111,64,.18);
     background: #fff;
     color: #253D2C;
-    font-size: .83rem;
+    font-size: .8rem;
     font-weight: 600;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: 'Jost', sans-serif;
+    box-shadow: 0 1px 4px rgba(46,111,64,0.05);
+  }
+
+  .cat-btn:hover {
+    border-color: #2E6F40;
+    background: #f0fbf3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(46,111,64,.12);
+  }
+
+  .cat-btn.active {
+    background: linear-gradient(135deg, #193D23, #2E6F40);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(46,111,64,.35);
+    transform: translateY(-2px);
+  }
+
+  .cat-count {
+    background: rgba(46,111,64,.12);
+    color: #2E6F40;
+    font-size: .68rem;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 50px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .cat-btn.active .cat-count {
+    background: rgba(255,255,255,.25);
+    color: #fff;
+  }
+
+  /* ── TOOLBAR ── */
+  .schemes-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem 0 1.5rem;
+    flex-wrap: wrap;
+    gap: .75rem;
+  }
+
+  .toolbar-info {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  .result-count {
+    font-size: .88rem;
+    color: #5A7A60;
+  }
+  .result-count strong { color: #2E6F40; font-weight: 800; }
+
+  .source-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .source-tag.ai { background: #ede9fe; color: #5b21b6; }
+  .source-tag.fallback { background: #fef3c7; color: #92400e; }
+
+  .toolbar-actions {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+  }
+
+  .refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .5rem 1rem;
+    background: #fff;
+    color: #2E6F40;
+    border: 1.5px solid rgba(46,111,64,.2);
+    border-radius: 12px;
+    font-size: .82rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all .25s ease;
     font-family: 'Jost', sans-serif;
   }
 
-  .cat-btn:hover, .cat-btn.active {
-    background: #2E6F40;
-    border-color: #2E6F40;
+  .refresh-btn:hover {
+    background: #193D23;
+    border-color: #193D23;
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(46,111,64,.3);
+    box-shadow: 0 4px 16px rgba(46,111,64,.3);
   }
 
-  /* ── Schemes Grid ── */
+  .refresh-btn.loading .spin-icon { animation: spin 1s linear infinite; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── SCHEMES GRID ── */
   .schemes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1.6rem;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.4rem;
   }
 
+  /* ── SCHEME CARD ── */
   .scheme-card {
     background: #fff;
-    border-radius: 20px;
-    border: 1.5px solid rgba(46,111,64,.1);
-    box-shadow: 0 4px 24px rgba(37,61,44,.08);
+    border-radius: 18px;
+    border: 1.5px solid rgba(46,111,64,.08);
+    box-shadow: 0 2px 16px rgba(37,61,44,.06);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform .3s ease, box-shadow .3s ease;
-    animation: cardIn .5s ease both;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    animation: cardSlideIn .5s ease both;
+    position: relative;
   }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(20px); }
+  @keyframes cardSlideIn {
+    from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
   .scheme-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 48px rgba(37,61,44,.16);
+    box-shadow: 0 20px 50px rgba(37,61,44,.14);
+    border-color: rgba(46,111,64,.2);
   }
 
+  .scheme-card .active-indicator {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74,222,128,0.5);
+    animation: pulse 2s infinite;
+  }
+
+  .scheme-card .active-indicator.inactive {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239,68,68,0.4);
+    animation: none;
+  }
+
+  /* Card Header */
   .scheme-card-header {
-    padding: 1.4rem 1.5rem 1rem;
-    background: linear-gradient(135deg, #f0fbf3 0%, #e8f8ed 100%);
-    border-bottom: 1px solid rgba(46,111,64,.1);
+    padding: 1.4rem 1.4rem 1rem;
+    background: linear-gradient(135deg, #f0faf3 0%, #e8f5ed 100%);
+    border-bottom: 1px solid rgba(46,111,64,.08);
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: .9rem;
   }
 
-  .scheme-emoji {
-    font-size: 2.2rem;
-    line-height: 1;
+  .scheme-icon-wrap {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(46,111,64,0.1);
   }
 
   .scheme-header-text { flex: 1; min-width: 0; }
 
   .scheme-name {
     font-weight: 800;
-    font-size: 1rem;
+    font-size: .95rem;
     color: #193D23;
     line-height: 1.3;
     margin-bottom: .2rem;
@@ -192,120 +444,161 @@
 
   .scheme-hindi {
     font-family: 'Noto Sans Devanagari', sans-serif;
-    font-size: .78rem;
+    font-size: .76rem;
     color: #2E6F40;
     font-weight: 600;
+    opacity: .8;
   }
 
-  .scheme-meta-tags {
+  .scheme-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: .4rem;
+    gap: .35rem;
     margin-top: .5rem;
   }
 
-  .meta-tag {
-    font-size: .7rem;
+  .scheme-tag {
+    font-size: .66rem;
     font-weight: 700;
-    padding: 2px 10px;
+    padding: 2px 9px;
     border-radius: 50px;
     text-transform: uppercase;
-    letter-spacing: .05em;
+    letter-spacing: .04em;
   }
 
-  .meta-tag.cat-financial  { background: #fef3c7; color: #92400e; }
-  .meta-tag.cat-insurance  { background: #dbeafe; color: #1e40af; }
-  .meta-tag.cat-irrigation { background: #cffafe; color: #155e75; }
-  .meta-tag.cat-soil       { background: #fce7f3; color: #9d174d; }
-  .meta-tag.cat-technology { background: #ede9fe; color: #5b21b6; }
-  .meta-tag.cat-credit     { background: #fef9c3; color: #713f12; }
-  .meta-tag.cat-market     { background: #d1fae5; color: #065f46; }
-  .meta-tag.cat-default    { background: #f3f4f6; color: #374151; }
-  .meta-tag.year-tag       { background: rgba(46,111,64,.1); color: #2E6F40; }
-  .meta-tag.active-tag     { background: #d1fae5; color: #065f46; }
+  .scheme-tag.cat-financial  { background: #fef3c7; color: #92400e; }
+  .scheme-tag.cat-insurance  { background: #dbeafe; color: #1e40af; }
+  .scheme-tag.cat-irrigation { background: #cffafe; color: #155e75; }
+  .scheme-tag.cat-soil       { background: #fce7f3; color: #9d174d; }
+  .scheme-tag.cat-technology { background: #ede9fe; color: #5b21b6; }
+  .scheme-tag.cat-credit     { background: #fef9c3; color: #713f12; }
+  .scheme-tag.cat-market     { background: #d1fae5; color: #065f46; }
+  .scheme-tag.cat-default    { background: #f3f4f6; color: #374151; }
+  .scheme-tag.year-tag       { background: rgba(46,111,64,.08); color: #2E6F40; }
 
+  /* Card Body */
   .scheme-card-body {
-    padding: 1.2rem 1.5rem;
+    padding: 1.2rem 1.4rem;
     flex: 1;
   }
 
-  .scheme-description {
-    font-size: .88rem;
+  .scheme-desc {
+    font-size: .86rem;
     color: #5A7A60;
     line-height: 1.65;
     margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .scheme-detail-row {
+  .scheme-details { display: flex; flex-direction: column; gap: .65rem; }
+
+  .detail-row {
     display: flex;
     gap: .5rem;
-    margin-bottom: .75rem;
-    font-size: .83rem;
+    align-items: flex-start;
+    font-size: .82rem;
   }
 
-  .detail-icon {
-    width: 28px; height: 28px;
+  .detail-icon-sm {
+    width: 26px; height: 26px;
     border-radius: 8px;
     background: #f0fbf3;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #2E6F40;
-    font-size: .75rem;
+    font-size: .7rem;
     flex-shrink: 0;
-    margin-top: .1rem;
+    margin-top: 1px;
   }
 
   .detail-content { flex: 1; min-width: 0; }
   .detail-label {
-    font-size: .7rem;
+    font-size: .66rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .06em;
     color: #9ca3af;
     margin-bottom: 1px;
   }
-  .detail-value { color: #253D2C; font-weight: 500; line-height: 1.4; }
+  .detail-value { color: #253D2C; font-weight: 500; line-height: 1.45; }
 
+  /* Card Footer */
   .scheme-card-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid rgba(46,111,64,.08);
+    padding: .9rem 1.4rem;
+    border-top: 1px solid rgba(46,111,64,.06);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: .75rem;
+    gap: .5rem;
+    background: #fafcfb;
   }
 
   .scheme-ministry {
-    font-size: .75rem;
+    font-size: .72rem;
     color: #9ca3af;
     flex: 1;
     line-height: 1.3;
   }
-  .scheme-ministry strong { color: #2E6F40; }
+  .scheme-ministry strong { color: #5A7A60; font-weight: 600; }
 
-  .scheme-apply-btn {
+  .card-actions {
+    display: flex;
+    gap: .4rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .detail-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: .5rem 1.1rem;
+    gap: 5px;
+    padding: .4rem .85rem;
+    background: rgba(46,111,64,.08);
+    color: #2E6F40;
+    border: 1px solid rgba(46,111,64,.15);
+    border-radius: 10px;
+    font-size: .73rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: 'Jost', sans-serif;
+    text-decoration: none;
+  }
+
+  .detail-btn:hover {
     background: #2E6F40;
     color: #fff;
-    border-radius: 50px;
-    font-size: .78rem;
+    border-color: #2E6F40;
+    transform: translateY(-1px);
+  }
+
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: .4rem .95rem;
+    background: linear-gradient(135deg, #193D23, #2E6F40);
+    color: #fff;
+    border-radius: 10px;
+    font-size: .73rem;
     font-weight: 700;
     text-decoration: none;
     transition: all .25s ease;
-    white-space: nowrap;
+    border: none;
+    cursor: pointer;
   }
 
-  .scheme-apply-btn:hover {
-    background: #193D23;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(46,111,64,.4);
+  .apply-btn:hover {
+    background: linear-gradient(135deg, #0f1e13, #193D23);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(46,111,64,.4);
   }
 
-  /* ── Loading / Error States ── */
+  /* ── LOADING / ERROR ── */
   .loading-state {
     text-align: center;
     padding: 5rem 2rem;
@@ -313,428 +606,1213 @@
   }
 
   .loading-spinner {
-    width: 56px; height: 56px;
-    border: 4px solid rgba(46,111,64,.15);
+    width: 52px; height: 52px;
+    border: 3.5px solid rgba(46,111,64,.12);
     border-top-color: #2E6F40;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin .8s linear infinite;
     margin: 0 auto 1.5rem;
   }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .loading-state h3 { color: #253D2C; font-size: 1.1rem; margin-bottom: .4rem; }
-  .loading-state p  { color: #9ca3af; font-size: .9rem; }
+  .loading-state h3 { color: #253D2C; font-size: 1.05rem; margin-bottom: .4rem; }
+  .loading-state p  { color: #9ca3af; font-size: .88rem; }
 
   .error-state {
     text-align: center;
     padding: 4rem 2rem;
     grid-column: 1 / -1;
   }
-
-  .error-state .error-icon { font-size: 3rem; margin-bottom: 1rem; }
-  .error-state h3 { color: #d63031; margin-bottom: .5rem; }
-  .error-state p  { color: #9ca3af; font-size: .9rem; max-width: 400px; margin: 0 auto 1.5rem; }
+  .error-state .err-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .error-state h3 { color: #d63031; margin-bottom: .5rem; font-size: 1.1rem; }
+  .error-state p  { color: #9ca3af; font-size: .88rem; max-width: 400px; margin: 0 auto 1.5rem; }
 
   .retry-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: .75rem 1.8rem;
-    background: #2E6F40;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    font-size: .9rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .25s ease;
-    font-family: 'Jost', sans-serif;
-  }
-
-  .retry-btn:hover {
-    background: #193D23;
-    transform: translateY(-2px);
-  }
-
-  /* ── Stats bar ── */
-  .schemes-stats {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 0 1.8rem;
-    flex-wrap: wrap;
-    gap: .75rem;
-  }
-
-  .stat-text {
-    font-size: .87rem;
-    color: #5A7A60;
-  }
-  .stat-count { font-weight: 800; color: #2E6F40; font-size: 1rem; }
-
-  .refresh-btn {
-    display: inline-flex;
-    align-items: center;
     gap: 7px;
-    padding: .55rem 1.2rem;
-    background: rgba(46,111,64,.1);
-    color: #2E6F40;
+    padding: .65rem 1.5rem;
+    background: #2E6F40;
+    color: #fff;
     border: none;
-    border-radius: 50px;
-    font-size: .83rem;
+    border-radius: 12px;
+    font-size: .88rem;
     font-weight: 700;
     cursor: pointer;
     transition: all .25s ease;
     font-family: 'Jost', sans-serif;
   }
-  .refresh-btn:hover {
-    background: #2E6F40;
-    color: #fff;
-    transform: translateY(-2px);
-  }
-  .refresh-btn .spin-icon { transition: transform .4s ease; }
-  .refresh-btn.loading .spin-icon { animation: spin 1s linear infinite; }
+  .retry-btn:hover { background: #0f1e13; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46,111,64,.4); }
 
-  /* ── Floating Help Button (VAR) ── */
-  .help-fab {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: .75rem;
-  }
-
-  .help-fab-tooltip {
-    background: #193D23;
-    color: #CFFFDC;
-    font-size: .78rem;
-    font-weight: 700;
-    padding: .45rem 1rem;
-    border-radius: 50px;
-    white-space: nowrap;
-    box-shadow: 0 4px 16px rgba(0,0,0,.2);
-    animation: tooltipIn .35s ease;
-    pointer-events: none;
-  }
-
-  @keyframes tooltipIn {
-    from { opacity: 0; transform: translateX(10px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  .help-fab-btn {
-    width: 58px; height: 58px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #2E6F40, #193D23);
-    color: #fff;
-    border: none;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 8px 28px rgba(46,111,64,.45);
-    transition: all .28s ease;
-    text-decoration: none;
-  }
-
-  .help-fab-btn:hover {
-    transform: scale(1.12) rotate(-8deg);
-    box-shadow: 0 12px 36px rgba(46,111,64,.55);
-  }
-
-  /* No results */
   .no-results {
     text-align: center;
     padding: 3rem;
     grid-column: 1 / -1;
     color: #9ca3af;
-    font-size: .95rem;
+    font-size: .92rem;
   }
 
+  /* ═══════════════════════════════════════
+     SCHEME DETAIL MODAL
+  ═══════════════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    animation: fadeIn .25s ease;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal-card {
+    background: #fff;
+    border-radius: 22px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(0,0,0,.25);
+    animation: modalSlideUp .35s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-card::-webkit-scrollbar { width: 5px; }
+  .modal-card::-webkit-scrollbar-thumb { background: rgba(46,111,64,.2); border-radius: 10px; }
+
+  .modal-close {
+    position: sticky;
+    top: 0;
+    float: right;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.06);
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 1rem 0 0;
+    z-index: 10;
+    transition: all .2s ease;
+    color: #374151;
+  }
+  .modal-close:hover { background: #ef4444; color: #fff; }
+
+  .modal-header {
+    padding: 2rem 2rem 1.2rem;
+    background: linear-gradient(135deg, #f0faf3, #e8f5ed);
+    border-bottom: 1px solid rgba(46,111,64,.08);
+  }
+
+  .modal-header h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #193D23;
+    margin-bottom: .3rem;
+  }
+
+  .modal-header .modal-hindi {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    color: #2E6F40;
+    font-size: .85rem;
+    font-weight: 600;
+  }
+
+  .modal-header .modal-ministry {
+    font-size: .78rem;
+    color: #5A7A60;
+    margin-top: .5rem;
+  }
+
+  .modal-body { padding: 1.5rem 2rem 2rem; }
+
+  .modal-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-section h4 {
+    font-size: .82rem;
+    font-weight: 700;
+    color: #2E6F40;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .modal-section p, .modal-section ul {
+    font-size: .88rem;
+    color: #374151;
+    line-height: 1.65;
+  }
+
+  .modal-section ul {
+    padding-left: 1.2rem;
+  }
+  .modal-section ul li { margin-bottom: .3rem; }
+
+  .faq-item {
+    background: #f9fbf9;
+    border: 1px solid rgba(46,111,64,.08);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    margin-bottom: .6rem;
+  }
+
+  .faq-item .faq-q {
+    font-weight: 700;
+    font-size: .84rem;
+    color: #193D23;
+    margin-bottom: .3rem;
+  }
+  .faq-item .faq-a {
+    font-size: .82rem;
+    color: #5A7A60;
+    line-height: 1.55;
+  }
+
+  .modal-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+
+  .modal-loading .loading-spinner {
+    width: 40px; height: 40px;
+  }
+
+  /* ═══════════════════════════════════════
+     AI CHAT SECTION
+  ═══════════════════════════════════════ */
+  .ai-section {
+    padding: 0 2rem 5rem;
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+
+  .ai-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(46,111,64,0.1);
+  }
+
+  .ai-icon-box {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #193D23, #2E6F40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 18px rgba(46,111,64,0.3);
+  }
+
+  .ai-title h2 {
+    font-family: 'Rationale', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #193D23;
+    margin-bottom: 2px;
+  }
+  .ai-title p { font-size: .82rem; color: #5A7A60; }
+
+  .ai-live-tag {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,.25);
+    color: #1a6b34;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
+
+  .ai-live-tag .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 1.8s infinite;
+  }
+
+  /* Chat Window */
+  .chat-window {
+    background: #fff;
+    border: 1.5px solid rgba(46,111,64,.12);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(46,111,64,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 460px;
+    max-height: 560px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    scroll-behavior: smooth;
+    background: #f9fbf9;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: rgba(46,111,64,.2); border-radius: 10px; }
+
+  .chat-msg {
+    display: flex;
+    gap: .6rem;
+    animation: msgIn .3s ease;
+    max-width: 85%;
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-msg.user { flex-direction: row-reverse; margin-left: auto; }
+
+  .msg-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+    flex-shrink: 0;
+  }
+
+  .msg-avatar.ai-av { background: linear-gradient(135deg, #193D23, #2E6F40); color: #fff; }
+  .msg-avatar.user-av { background: linear-gradient(135deg, #2E6F40, #4ade80); color: #fff; }
+
+  .msg-bubble {
+    padding: .7rem 1rem;
+    border-radius: 14px;
+    font-size: .86rem;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  .chat-msg.ai .msg-bubble {
+    background: #fff;
+    color: #1A2E1F;
+    border: 1px solid rgba(46,111,64,.12);
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 6px rgba(46,111,64,0.05);
+  }
+
+  .chat-msg.user .msg-bubble {
+    background: linear-gradient(135deg, #193D23, #2E6F40);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: .6rem .9rem;
+    background: #fff;
+    border: 1px solid rgba(46,111,64,0.12);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+  }
+
+  .typing-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #2E6F40;
+    animation: typeBounce .9s ease infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: .18s; }
+  .typing-dot:nth-child(3) { animation-delay: .36s; }
+
+  @keyframes typeBounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: .5; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Quick prompts */
+  .chat-prompts {
+    padding: .6rem 1.2rem;
+    border-top: 1px solid rgba(46,111,64,.06);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    background: #fff;
+    align-items: center;
+  }
+
+  .prompt-label {
+    font-size: .68rem;
+    font-weight: 700;
+    color: #5A7A60;
+    margin-right: .2rem;
+  }
+
+  .quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: .3rem .75rem;
+    border-radius: 50px;
+    border: 1px solid rgba(46,111,64,.18);
+    background: rgba(46,111,64,.04);
+    color: #253D2C;
+    font-size: .72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .22s ease;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .quick-btn:hover {
+    background: #193D23;
+    border-color: #193D23;
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  /* Input */
+  .chat-input-row {
+    padding: .8rem 1rem;
+    border-top: 1px solid rgba(46,111,64,.08);
+    display: flex;
+    gap: .6rem;
+    align-items: center;
+    background: #fff;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: .7rem 1rem;
+    border: 1.5px solid rgba(46,111,64,.15);
+    border-radius: 50px;
+    font-family: 'Jost', sans-serif;
+    font-size: .88rem;
+    color: #1A2E1F;
+    background: #f9fbf9;
+    outline: none;
+    transition: all .25s ease;
+  }
+
+  .chat-input:focus {
+    border-color: #2E6F40;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(46,111,64,.1);
+  }
+  .chat-input::placeholder { color: rgba(90,122,96,.45); }
+
+  .send-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #193D23, #2E6F40);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .25s ease;
+    flex-shrink: 0;
+    box-shadow: 0 3px 12px rgba(46,111,64,.3);
+  }
+
+  .send-btn:hover {
+    background: linear-gradient(135deg, #0f1e13, #193D23);
+    transform: scale(1.06);
+    box-shadow: 0 5px 18px rgba(46,111,64,.45);
+  }
+  .send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+  /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .schemes-grid { grid-template-columns: 1fr; }
-    .help-hero { padding: 6.5rem 1.5rem 3rem; }
+    .help-hero { padding: 6.5rem 1.2rem 3.5rem; }
+    .hero-search-row { flex-direction: column; }
+    .state-select { min-width: 100%; }
     .category-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: .5rem; }
     .cat-btn { flex-shrink: 0; }
-    .schemes-stats { flex-direction: column; align-items: flex-start; }
+    .schemes-toolbar { flex-direction: column; align-items: flex-start; }
+    .stats-strip { gap: 1.25rem; }
+    .chat-window { min-height: 380px; max-height: 480px; }
+    .ai-header { flex-wrap: wrap; }
+    .ai-live-tag { margin-left: 0; }
+    .modal-card { max-height: 90vh; border-radius: 16px; }
+    .modal-header, .modal-body { padding-left: 1.2rem; padding-right: 1.2rem; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- Hero Section -->
+<!-- ═══════════════ HERO ═══════════════ -->
 <section class="help-hero">
-  <div class="help-hero-badge">
-    <span class="live-dot"></span>
-    AI-Powered · Updated via Gemini
-  </div>
-  <h1>🌾 Government Schemes for Farmers</h1>
-  <p>Discover the latest Indian Government schemes designed to empower farmers — powered by Google Gemini AI.</p>
+  <div class="hero-content">
+    <div class="hero-badge-row">
+      <span class="hero-badge">
+        <span class="live-dot"></span>
+        AI-Powered • Live Data
+      </span>
+      <span class="hero-badge source-badge" id="sourceTag">
+        <i class="fas fa-robot"></i> Gemini AI
+      </span>
+    </div>
 
-  <div class="scheme-search-wrap">
-    <i class="fas fa-search search-icon"></i>
-    <input type="text" id="schemeSearch" placeholder="Search schemes..." autocomplete="off">
+    <h1>🏛️ All Government <span class="gradient-text">Schemes</span> for Farmers</h1>
+    <p class="hero-sub">
+      Discover every Central & State government scheme for Indian farmers — eligibility, benefits, 
+      how to apply — all powered by Google Gemini AI in real-time.
+    </p>
+
+    <div class="hero-search-row">
+      <div class="search-wrap">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="schemeSearch" placeholder="Search schemes by name, benefit, or ministry..." autocomplete="off">
+      </div>
+      <select id="stateSelect" class="state-select">
+        <option value="">🇮🇳 All India</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+        <option value="Bihar">Bihar</option>
+        <option value="Chhattisgarh">Chhattisgarh</option>
+        <option value="Gujarat">Gujarat</option>
+        <option value="Haryana">Haryana</option>
+        <option value="Himachal Pradesh">Himachal Pradesh</option>
+        <option value="Jharkhand">Jharkhand</option>
+        <option value="Karnataka">Karnataka</option>
+        <option value="Kerala">Kerala</option>
+        <option value="Madhya Pradesh">Madhya Pradesh</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Odisha">Odisha</option>
+        <option value="Punjab">Punjab</option>
+        <option value="Rajasthan">Rajasthan</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Telangana">Telangana</option>
+        <option value="Uttar Pradesh">Uttar Pradesh</option>
+        <option value="Uttarakhand">Uttarakhand</option>
+        <option value="West Bengal">West Bengal</option>
+      </select>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-num" id="totalSchemeCount">—</div>
+        <div class="stat-label">Schemes Loaded</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">29+</div>
+        <div class="stat-label">States Covered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2026</div>
+        <div class="stat-label">Updated</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Body -->
+<!-- ═══════════════ BODY ═══════════════ -->
 <div class="help-body">
 
   <!-- Category Tabs -->
   <div class="category-tabs" id="categoryTabs">
-    <button class="cat-btn active" data-cat="all">🌾 All Schemes</button>
-    <button class="cat-btn" data-cat="financial">💰 Financial Aid</button>
-    <button class="cat-btn" data-cat="insurance">🛡️ Insurance</button>
-    <button class="cat-btn" data-cat="credit">💳 Credit & Loans</button>
-    <button class="cat-btn" data-cat="irrigation">💧 Irrigation</button>
-    <button class="cat-btn" data-cat="soil">🌱 Soil & Seeds</button>
-    <button class="cat-btn" data-cat="technology">📱 Technology</button>
-    <button class="cat-btn" data-cat="market">🏪 Market Access</button>
+    <button class="cat-btn active" data-cat="all">🌾 All Schemes <span class="cat-count" id="countAll">—</span></button>
+    <button class="cat-btn" data-cat="financial">💰 Financial Aid <span class="cat-count" id="countFinancial">0</span></button>
+    <button class="cat-btn" data-cat="insurance">🛡️ Insurance <span class="cat-count" id="countInsurance">0</span></button>
+    <button class="cat-btn" data-cat="credit">💳 Credit & Loans <span class="cat-count" id="countCredit">0</span></button>
+    <button class="cat-btn" data-cat="irrigation">💧 Irrigation <span class="cat-count" id="countIrrigation">0</span></button>
+    <button class="cat-btn" data-cat="soil">🌱 Soil & Organic <span class="cat-count" id="countSoil">0</span></button>
+    <button class="cat-btn" data-cat="technology">📱 Technology <span class="cat-count" id="countTechnology">0</span></button>
+    <button class="cat-btn" data-cat="market">🏪 Market Access <span class="cat-count" id="countMarket">0</span></button>
   </div>
 
-  <!-- Stats Bar -->
-  <div class="schemes-stats">
-    <p class="stat-text">
-      Showing <span class="stat-count" id="schemeCount">—</span> schemes for Indian Farmers
-    </p>
-    <button class="refresh-btn" id="refreshBtn" onclick="loadSchemes()">
-      <i class="fas fa-sync-alt spin-icon"></i> Refresh
-    </button>
+  <!-- Toolbar -->
+  <div class="schemes-toolbar">
+    <div class="toolbar-info">
+      <span class="result-count">
+        Showing <strong id="visibleCount">—</strong> schemes
+      </span>
+      <span class="source-tag ai" id="dataSourceTag">
+        <i class="fas fa-robot"></i> Gemini AI
+      </span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="refresh-btn" id="refreshBtn" onclick="loadSchemes()">
+        <i class="fas fa-sync-alt spin-icon"></i> Refresh with AI
+      </button>
+    </div>
   </div>
 
   <!-- Schemes Grid -->
   <div class="schemes-grid" id="schemesGrid">
-    <!-- Loading state on first load -->
     <div class="loading-state" id="loadingState">
       <div class="loading-spinner"></div>
-      <h3>Fetching Latest Schemes...</h3>
-      <p>Gemini AI is retrieving the most current government schemes for farmers.</p>
+      <h3>Loading Government Schemes...</h3>
+      <p>Gemini AI is fetching the latest schemes for Indian farmers.</p>
     </div>
   </div>
 
 </div>
 
-<!-- Floating Help Button (VAB) -->
-<div class="help-fab" id="helpFab">
-  <div class="help-fab-tooltip" id="fabTooltip" style="display:none;">Back to Advisor</div>
-  <a href="{% url 'advisor' %}" class="help-fab-btn" id="fabBtn" title="Go to Crop Advisor">
-    🌾
-  </a>
+<!-- ═══════════════ SCHEME DETAIL MODAL ═══════════════ -->
+<div class="modal-overlay" id="schemeModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()" title="Close">✕</button>
+    <div id="modalContent">
+      <div class="modal-loading">
+        <div class="loading-spinner"></div>
+        <p style="color:#9ca3af;font-size:.88rem;">Fetching scheme details...</p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ═══════════════ AI CHAT SECTION ═══════════════ -->
+<section style="background:#fafcfb;">
+  <div class="ai-section">
+
+    <div class="ai-header">
+      <div class="ai-icon-box">🤖</div>
+      <div class="ai-title">
+        <h2>Ask Kisan AI — Scheme Expert</h2>
+        <p>Ask anything about government schemes, eligibility, documents, or how to apply</p>
+      </div>
+      <div class="ai-live-tag">
+        <div class="live-dot"></div>
+        Gemini AI Active
+      </div>
+    </div>
+
+    <div class="chat-window">
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg ai">
+          <div class="msg-avatar ai-av">🌾</div>
+          <div class="msg-bubble">
+            <strong>Namaste! 🙏</strong> I'm your AI-powered Government Scheme expert.<br><br>
+            I can help you with:
+            <ul style="margin:.4rem 0 0 1rem;">
+              <li>🏛️ Details of any central or state government scheme</li>
+              <li>📋 Eligibility check — "Am I eligible for PM-KISAN?"</li>
+              <li>📝 Step-by-step application guidance</li>
+              <li>📄 Required documents for any scheme</li>
+              <li>💰 Subsidy & benefit amounts</li>
+              <li>🗓️ Important deadlines & registration windows</li>
+            </ul>
+            <br>Ask me anything below! 👇
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Prompts -->
+      <div class="chat-prompts" id="quickPrompts">
+        <span class="prompt-label">Quick:</span>
+        <button class="quick-btn" onclick="askPrompt('List all major schemes for small farmers in 2026')">📋 All Major Schemes</button>
+        <button class="quick-btn" onclick="askPrompt('How to apply for PM-KISAN online?')">💰 PM-KISAN</button>
+        <button class="quick-btn" onclick="askPrompt('What is PMFBY crop insurance premium and coverage?')">🛡️ Crop Insurance</button>
+        <button class="quick-btn" onclick="askPrompt('How to get Kisan Credit Card with low interest?')">💳 KCC Loan</button>
+        <button class="quick-btn" onclick="askPrompt('Government schemes for organic farming in India')">🌿 Organic Schemes</button>
+        <button class="quick-btn" onclick="askPrompt('Drone subsidy schemes for farmers 2026')">📱 Drone Subsidy</button>
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input-row">
+        <input
+          type="text"
+          id="chatInput"
+          class="chat-input"
+          placeholder="Ask about any government scheme, eligibility, or how to apply..."
+          autocomplete="off"
+          maxlength="500"
+        >
+        <button class="send-btn" id="chatSendBtn" onclick="sendChat()" title="Send">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-  /* =============================================
-     Help Center — Government Schemes Logic
-  ============================================= */
+/* ═══════════════════════════════════════════════
+   HELP CENTER — Government Schemes Engine
+   AI-Powered via Gemini API
+═══════════════════════════════════════════════ */
 
-  let currentCategory = 'all';
-  let allSchemesData = [];
-  let searchQuery = '';
+/* ── STATE ── */
+let currentCategory = 'all';
+let allSchemesData  = [];
+let searchQuery     = '';
+let currentState    = '';
+let dataSource      = 'loading';
 
-  const grid = document.getElementById('schemesGrid');
-  const countEl = document.getElementById('schemeCount');
-  const searchInput = document.getElementById('schemeSearch');
-  const refreshBtn = document.getElementById('refreshBtn');
+/* ── DOM ── */
+const grid         = document.getElementById('schemesGrid');
+const visibleCount = document.getElementById('visibleCount');
+const totalCount   = document.getElementById('totalSchemeCount');
+const searchInput  = document.getElementById('schemeSearch');
+const stateSelect  = document.getElementById('stateSelect');
+const refreshBtn   = document.getElementById('refreshBtn');
+const sourceTag    = document.getElementById('dataSourceTag');
 
-  /* ── Category colour map ── */
-  const catClass = {
-    financial:  'cat-financial',
-    insurance:  'cat-insurance',
-    irrigation: 'cat-irrigation',
-    soil:       'cat-soil',
-    technology: 'cat-technology',
-    credit:     'cat-credit',
-    market:     'cat-market',
-  };
+/* ── CATEGORY STYLING ── */
+const catClasses = {
+  financial:  'cat-financial',
+  insurance:  'cat-insurance',
+  irrigation: 'cat-irrigation',
+  soil:       'cat-soil',
+  technology: 'cat-technology',
+  credit:     'cat-credit',
+  market:     'cat-market',
+};
 
-  const catLabel = {
-    financial:  '💰 Financial',
-    insurance:  '🛡️ Insurance',
-    irrigation: '💧 Irrigation',
-    soil:       '🌱 Soil',
-    technology: '📱 Technology',
-    credit:     '💳 Credit',
-    market:     '🏪 Market',
-  };
+const catLabels = {
+  financial:  '💰 Financial',
+  insurance:  '🛡️ Insurance',
+  irrigation: '💧 Irrigation',
+  soil:       '🌱 Soil & Organic',
+  technology: '📱 Technology',
+  credit:     '💳 Credit',
+  market:     '🏪 Market',
+};
 
-  /* ── Fetch from API ── */
-  async function loadSchemes(category = currentCategory) {
-    currentCategory = category;
+/* ═══════════════════════════════
+   FETCH SCHEMES FROM API
+═══════════════════════════════ */
+async function loadSchemes(category) {
+  if (category !== undefined) currentCategory = category;
 
-    // Show loading
-    grid.innerHTML = `
-      <div class="loading-state">
-        <div class="loading-spinner"></div>
-        <h3>Fetching Latest Schemes...</h3>
-        <p>Gemini AI is retrieving the most current government schemes for farmers.</p>
-      </div>`;
-    countEl.textContent = '—';
-    refreshBtn.classList.add('loading');
+  // Show loading
+  grid.innerHTML = `
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <h3>🔍 Fetching Government Schemes...</h3>
+      <p>Gemini AI is searching for the latest central & state government schemes.</p>
+    </div>`;
+  visibleCount.textContent = '—';
+  refreshBtn.classList.add('loading');
 
-    try {
-      const res = await fetch(`/help/api/schemes/?category=${category}`);
-      const data = await res.json();
+  try {
+    let url = `/help/api/schemes/?category=${currentCategory}`;
+    if (currentState) url += `&state=${encodeURIComponent(currentState)}`;
 
-      if (!data.success) throw new Error(data.error || 'Unknown error');
+    const res  = await fetch(url);
+    const data = await res.json();
 
-      allSchemesData = data.schemes;
-      renderSchemes(filterBySearch(allSchemesData));
+    if (!data.success) throw new Error(data.error || 'Unknown error');
 
-    } catch (err) {
-      grid.innerHTML = `
-        <div class="error-state">
-          <div class="error-icon">⚠️</div>
-          <h3>Failed to load schemes</h3>
-          <p>${err.message || 'Could not connect to Gemini AI. Please try again.'}</p>
-          <button class="retry-btn" onclick="loadSchemes()">
-            <i class="fas fa-redo"></i> Try Again
-          </button>
-        </div>`;
-      countEl.textContent = '0';
-    } finally {
-      refreshBtn.classList.remove('loading');
+    allSchemesData = data.schemes || [];
+    dataSource = data.source || 'unknown';
+
+    // Update source badge
+    if (dataSource === 'gemini-ai') {
+      sourceTag.className = 'source-tag ai';
+      sourceTag.innerHTML = '<i class="fas fa-robot"></i> Gemini AI';
+      document.getElementById('sourceTag').innerHTML = '<i class="fas fa-robot"></i> Gemini AI';
+    } else {
+      sourceTag.className = 'source-tag fallback';
+      sourceTag.innerHTML = '<i class="fas fa-database"></i> Cached Data';
+      document.getElementById('sourceTag').innerHTML = '<i class="fas fa-database"></i> Offline Data';
     }
+
+    updateCategoryCounts(allSchemesData);
+    renderSchemes(filterSchemes(allSchemesData));
+    totalCount.textContent = allSchemesData.length;
+
+  } catch (err) {
+    console.error('Scheme load error:', err);
+    grid.innerHTML = `
+      <div class="error-state">
+        <div class="err-icon">⚠️</div>
+        <h3>Failed to Load Schemes</h3>
+        <p>${escHtml(err.message || 'Could not connect to AI. Please try again.')}</p>
+        <button class="retry-btn" onclick="loadSchemes()">
+          <i class="fas fa-redo"></i> Try Again
+        </button>
+      </div>`;
+    visibleCount.textContent = '0';
+    totalCount.textContent = '0';
+  } finally {
+    refreshBtn.classList.remove('loading');
+  }
+}
+
+/* ── UPDATE CATEGORY COUNTS ── */
+function updateCategoryCounts(schemes) {
+  const counts = { all: schemes.length };
+  for (const cat of Object.keys(catClasses)) {
+    counts[cat] = schemes.filter(s => s.category === cat).length;
   }
 
-  /* ── Filter by search ── */
-  function filterBySearch(schemes) {
-    if (!searchQuery) return schemes;
+  document.getElementById('countAll').textContent = counts.all;
+  document.getElementById('countFinancial').textContent = counts.financial || 0;
+  document.getElementById('countInsurance').textContent = counts.insurance || 0;
+  document.getElementById('countCredit').textContent = counts.credit || 0;
+  document.getElementById('countIrrigation').textContent = counts.irrigation || 0;
+  document.getElementById('countSoil').textContent = counts.soil || 0;
+  document.getElementById('countTechnology').textContent = counts.technology || 0;
+  document.getElementById('countMarket').textContent = counts.market || 0;
+}
+
+/* ── FILTER SCHEMES ── */
+function filterSchemes(schemes) {
+  let result = schemes;
+
+  // Category filter (client-side)
+  if (currentCategory && currentCategory !== 'all') {
+    result = result.filter(s => s.category === currentCategory);
+  }
+
+  // Search filter
+  if (searchQuery) {
     const q = searchQuery.toLowerCase();
-    return schemes.filter(s =>
+    result = result.filter(s =>
       (s.name || '').toLowerCase().includes(q) ||
+      (s.hindi_name || '').toLowerCase().includes(q) ||
       (s.description || '').toLowerCase().includes(q) ||
       (s.benefits || '').toLowerCase().includes(q) ||
-      (s.ministry || '').toLowerCase().includes(q)
+      (s.ministry || '').toLowerCase().includes(q) ||
+      (s.eligibility || '').toLowerCase().includes(q) ||
+      (s.how_to_apply || '').toLowerCase().includes(q)
     );
   }
 
-  /* ── Render schemes ── */
-  function renderSchemes(schemes) {
-    countEl.textContent = schemes.length;
+  return result;
+}
 
-    if (schemes.length === 0) {
-      grid.innerHTML = `<div class="no-results">😔 No schemes found. Try a different category or search term.</div>`;
-      return;
-    }
+/* ── RENDER SCHEMES ── */
+function renderSchemes(schemes) {
+  visibleCount.textContent = schemes.length;
 
-    grid.innerHTML = schemes.map((s, i) => buildCard(s, i)).join('');
+  if (schemes.length === 0) {
+    grid.innerHTML = `<div class="no-results">😔 No schemes found matching your criteria. Try a different category or search term.</div>`;
+    return;
   }
 
-  /* ── Build single card HTML ── */
-  function buildCard(s, index) {
-    const cls = catClass[s.category] || 'cat-default';
-    const label = catLabel[s.category] || s.category;
-    const activeTag = s.is_active
-      ? `<span class="meta-tag active-tag">✅ Active</span>`
-      : `<span class="meta-tag" style="background:#fef2f2;color:#991b1b;">❌ Inactive</span>`;
+  grid.innerHTML = schemes.map((s, i) => buildCard(s, i)).join('');
+}
 
-    const hindiLine = s.hindi_name
-      ? `<div class="scheme-hindi">${s.hindi_name}</div>` : '';
+/* ── BUILD CARD HTML ── */
+function buildCard(s, idx) {
+  const cls   = catClasses[s.category] || 'cat-default';
+  const label = catLabels[s.category]  || s.category || 'General';
+  const activeClass = s.is_active !== false ? '' : ' inactive';
 
-    const link = s.official_link
-      ? `<a href="${escHtml(s.official_link)}" target="_blank" rel="noopener" class="scheme-apply-btn">
-           Apply Now <i class="fas fa-external-link-alt"></i>
-         </a>`
-      : `<span class="scheme-apply-btn" style="opacity:.5;cursor:default;">Info Only</span>`;
+  const hindi = s.hindi_name
+    ? `<div class="scheme-hindi">${escHtml(s.hindi_name)}</div>` : '';
 
-    return `
-    <div class="scheme-card" style="animation-delay:${index * .07}s">
-      <div class="scheme-card-header">
-        <div class="scheme-emoji">${escHtml(s.icon || '🌾')}</div>
-        <div class="scheme-header-text">
-          <div class="scheme-name">${escHtml(s.name)}</div>
-          ${hindiLine}
-          <div class="scheme-meta-tags">
-            <span class="meta-tag ${cls}">${label}</span>
-            <span class="meta-tag year-tag">📅 ${escHtml(String(s.launch_year || 'N/A'))}</span>
-            ${activeTag}
-          </div>
+  const link = s.official_link
+    ? `<a href="${escHtml(s.official_link)}" target="_blank" rel="noopener" class="apply-btn">
+         Apply <i class="fas fa-external-link-alt"></i>
+       </a>`
+    : '';
+
+  return `
+  <div class="scheme-card" style="animation-delay:${idx * .06}s">
+    <div class="active-indicator${activeClass}"></div>
+
+    <div class="scheme-card-header">
+      <div class="scheme-icon-wrap">${escHtml(s.icon || '🌾')}</div>
+      <div class="scheme-header-text">
+        <div class="scheme-name">${escHtml(s.name)}</div>
+        ${hindi}
+        <div class="scheme-tags">
+          <span class="scheme-tag ${cls}">${label}</span>
+          <span class="scheme-tag year-tag">📅 ${escHtml(String(s.launch_year || 'N/A'))}</span>
         </div>
       </div>
+    </div>
 
-      <div class="scheme-card-body">
-        <p class="scheme-description">${escHtml(s.description)}</p>
-
-        <div class="scheme-detail-row">
-          <div class="detail-icon"><i class="fas fa-gift"></i></div>
+    <div class="scheme-card-body">
+      <p class="scheme-desc">${escHtml(s.description)}</p>
+      <div class="scheme-details">
+        <div class="detail-row">
+          <div class="detail-icon-sm"><i class="fas fa-gift"></i></div>
           <div class="detail-content">
             <div class="detail-label">Benefits</div>
             <div class="detail-value">${escHtml(s.benefits)}</div>
           </div>
         </div>
-
-        <div class="scheme-detail-row">
-          <div class="detail-icon"><i class="fas fa-user-check"></i></div>
+        <div class="detail-row">
+          <div class="detail-icon-sm"><i class="fas fa-user-check"></i></div>
           <div class="detail-content">
             <div class="detail-label">Eligibility</div>
             <div class="detail-value">${escHtml(s.eligibility)}</div>
           </div>
         </div>
-
-        <div class="scheme-detail-row">
-          <div class="detail-icon"><i class="fas fa-file-alt"></i></div>
+        <div class="detail-row">
+          <div class="detail-icon-sm"><i class="fas fa-file-alt"></i></div>
           <div class="detail-content">
             <div class="detail-label">How to Apply</div>
             <div class="detail-value">${escHtml(s.how_to_apply)}</div>
           </div>
         </div>
+        ${s.documents_required ? `
+        <div class="detail-row">
+          <div class="detail-icon-sm"><i class="fas fa-folder-open"></i></div>
+          <div class="detail-content">
+            <div class="detail-label">Documents Required</div>
+            <div class="detail-value">${escHtml(s.documents_required)}</div>
+          </div>
+        </div>` : ''}
       </div>
+    </div>
 
-      <div class="scheme-card-footer">
-        <div class="scheme-ministry">
-          <strong>${escHtml(s.ministry)}</strong>
-        </div>
+    <div class="scheme-card-footer">
+      <div class="scheme-ministry"><strong>${escHtml(s.ministry)}</strong></div>
+      <div class="card-actions">
+        <button class="detail-btn" onclick="openSchemeDetail('${escHtml(s.name).replace(/'/g, "\\'")}')">
+          <i class="fas fa-info-circle"></i> Details
+        </button>
         ${link}
       </div>
-    </div>`;
-  }
+    </div>
+  </div>`;
+}
 
-  /* ── Helpers ── */
-  function escHtml(str) {
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+/* ── HELPERS ── */
+function escHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
-  /* ── Category tabs ── */
-  document.getElementById('categoryTabs').addEventListener('click', e => {
-    const btn = e.target.closest('.cat-btn');
-    if (!btn) return;
+/* ═══════════════════════════════
+   CATEGORY TABS
+═══════════════════════════════ */
+document.getElementById('categoryTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-btn');
+  if (!btn) return;
 
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 
-    currentCategory = btn.dataset.cat;
-    loadSchemes(currentCategory);
-  });
+  currentCategory = btn.dataset.cat;
+  renderSchemes(filterSchemes(allSchemesData));
+});
 
-  /* ── Search ── */
-  searchInput.addEventListener('input', () => {
+/* ═══════════════════════════════
+   SEARCH
+═══════════════════════════════ */
+let searchDebounce;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
     searchQuery = searchInput.value.trim();
     if (allSchemesData.length) {
-      renderSchemes(filterBySearch(allSchemesData));
+      renderSchemes(filterSchemes(allSchemesData));
     }
+  }, 250);
+});
+
+/* ═══════════════════════════════
+   STATE FILTER
+═══════════════════════════════ */
+stateSelect.addEventListener('change', () => {
+  currentState = stateSelect.value;
+  loadSchemes();
+});
+
+/* ═══════════════════════════════
+   SCHEME DETAIL MODAL
+═══════════════════════════════ */
+async function openSchemeDetail(schemeName) {
+  const modal = document.getElementById('schemeModal');
+  const content = document.getElementById('modalContent');
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  content.innerHTML = `
+    <div class="modal-loading">
+      <div class="loading-spinner"></div>
+      <p style="color:#9ca3af;font-size:.88rem;">AI is fetching detailed information about <strong>${schemeName}</strong>...</p>
+    </div>`;
+
+  try {
+    const res = await fetch(`/help/api/scheme-detail/?name=${encodeURIComponent(schemeName)}`);
+    const data = await res.json();
+
+    if (!data.success) throw new Error(data.error);
+
+    const d = data.detail;
+    let faqsHtml = '';
+    if (d.faqs && Array.isArray(d.faqs)) {
+      faqsHtml = d.faqs.map(f => `
+        <div class="faq-item">
+          <div class="faq-q">❓ ${escHtml(f.q)}</div>
+          <div class="faq-a">${escHtml(f.a)}</div>
+        </div>
+      `).join('');
+    }
+
+    content.innerHTML = `
+      <div class="modal-header">
+        <h2>${escHtml(d.name || schemeName)}</h2>
+        ${d.hindi_name ? `<div class="modal-hindi">${escHtml(d.hindi_name)}</div>` : ''}
+        ${d.ministry ? `<div class="modal-ministry"><i class="fas fa-landmark"></i> ${escHtml(d.ministry)}</div>` : ''}
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4><i class="fas fa-info-circle"></i> Description</h4>
+          <p>${escHtml(d.description || '')}</p>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-gift"></i> Benefits</h4>
+          <p>${escHtml(d.benefits || '')}</p>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-user-check"></i> Eligibility</h4>
+          <p>${escHtml(d.eligibility || '')}</p>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-clipboard-list"></i> How to Apply</h4>
+          <p>${escHtml(d.how_to_apply || '')}</p>
+        </div>
+        ${d.documents_required ? `
+        <div class="modal-section">
+          <h4><i class="fas fa-folder-open"></i> Documents Required</h4>
+          <p>${escHtml(d.documents_required)}</p>
+        </div>` : ''}
+        ${d.helpline ? `
+        <div class="modal-section">
+          <h4><i class="fas fa-phone-alt"></i> Helpline</h4>
+          <p>${escHtml(d.helpline)}</p>
+        </div>` : ''}
+        ${d.important_dates ? `
+        <div class="modal-section">
+          <h4><i class="fas fa-calendar-alt"></i> Important Dates (2026)</h4>
+          <p>${escHtml(d.important_dates)}</p>
+        </div>` : ''}
+        ${d.tips ? `
+        <div class="modal-section">
+          <h4><i class="fas fa-lightbulb"></i> Tips for Farmers</h4>
+          <p>${escHtml(d.tips)}</p>
+        </div>` : ''}
+        ${faqsHtml ? `
+        <div class="modal-section">
+          <h4><i class="fas fa-question-circle"></i> FAQs</h4>
+          ${faqsHtml}
+        </div>` : ''}
+        ${d.official_link ? `
+        <div style="text-align:center;padding-top:1rem;">
+          <a href="${escHtml(d.official_link)}" target="_blank" rel="noopener" class="apply-btn" style="padding:.6rem 2rem;font-size:.85rem;">
+            Visit Official Website <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>` : ''}
+      </div>`;
+
+  } catch (err) {
+    content.innerHTML = `
+      <div style="text-align:center;padding:3rem 2rem;">
+        <div style="font-size:2rem;margin-bottom:1rem;">⚠️</div>
+        <h3 style="color:#d63031;margin-bottom:.5rem;">Could not load details</h3>
+        <p style="color:#9ca3af;font-size:.88rem;">${escHtml(err.message || 'Please try again later.')}</p>
+        <button class="retry-btn" onclick="openSchemeDetail('${schemeName.replace(/'/g, "\\'")}');" style="margin-top:1rem;">
+          <i class="fas fa-redo"></i> Retry
+        </button>
+      </div>`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('schemeModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close modal on overlay click
+document.getElementById('schemeModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// Close modal on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ═══════════════════════════════
+   INITIAL LOAD
+═══════════════════════════════ */
+loadSchemes('all');
+
+
+/* ═══════════════════════════════════════════════
+   AI CHATBOT — Government Scheme Expert
+   Uses dedicated /help/api/chat/ endpoint
+═══════════════════════════════════════════════ */
+
+const chatMessages = document.getElementById('chatMessages');
+const chatInput    = document.getElementById('chatInput');
+const chatSendBtn  = document.getElementById('chatSendBtn');
+const quickPrompts = document.getElementById('quickPrompts');
+
+let isBotTyping = false;
+let typingEl    = null;
+
+/* ── SEND MESSAGE ── */
+async function sendChat() {
+  const msg = chatInput.value.trim();
+  if (!msg || isBotTyping) return;
+
+  chatInput.value = '';
+  chatSendBtn.disabled = true;
+  isBotTyping = true;
+
+  if (quickPrompts) quickPrompts.style.display = 'none';
+
+  appendMsg('user', msg);
+  scrollChat();
+
+  showTyping();
+  scrollChat();
+
+  try {
+    const res = await fetch('/help/api/chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrf()
+      },
+      body: JSON.stringify({ message: msg })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    const reply = data.reply || "Sorry, I couldn't process that. Please try again.";
+    appendMsg('ai', formatReply(reply));
+
+  } catch (err) {
+    hideTyping();
+    appendMsg('ai', '⚠️ Connection error. Please check your internet and try again.');
+  } finally {
+    isBotTyping = false;
+    chatSendBtn.disabled = false;
+    chatInput.focus();
+    scrollChat();
+  }
+}
+
+function askPrompt(text) {
+  if (isBotTyping) return;
+  chatInput.value = text;
+  sendChat();
+}
+
+function appendMsg(role, html) {
+  const wrap = document.createElement('div');
+  wrap.className = `chat-msg ${role}`;
+
+  const av = document.createElement('div');
+  av.className = `msg-avatar ${role === 'ai' ? 'ai-av' : 'user-av'}`;
+  av.textContent = role === 'ai' ? '🌾' : '👤';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = html;
+
+  wrap.appendChild(av);
+  wrap.appendChild(bubble);
+  chatMessages.appendChild(wrap);
+}
+
+function showTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-msg ai';
+  wrap.id = 'typingWrap';
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar ai-av';
+  av.textContent = '🌾';
+
+  const ind = document.createElement('div');
+  ind.className = 'typing-indicator';
+  ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+  wrap.appendChild(av);
+  wrap.appendChild(ind);
+  chatMessages.appendChild(wrap);
+  typingEl = wrap;
+}
+
+function hideTyping() {
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+}
+
+function scrollChat() {
+  requestAnimationFrame(() => {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   });
+}
 
-  /* ── FAB tooltip ── */
-  const fabBtn = document.getElementById('fabBtn');
-  const fabTooltip = document.getElementById('fabTooltip');
-  fabBtn.addEventListener('mouseenter', () => { fabTooltip.style.display = 'block'; });
-  fabBtn.addEventListener('mouseleave', () => { fabTooltip.style.display = 'none'; });
+function formatReply(text) {
+  let safe = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
-  /* ── Initial Load ── */
-  loadSchemes('all');
+  safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  safe = safe.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  safe = safe.replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>');
+  safe = safe.replace(/(<li>.*<\/li>)/s, '<ul style="margin:.4rem 0 .4rem 1rem;">$1</ul>');
+  safe = safe.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+  safe = safe.replace(/\n\n/g, '<br><br>');
+  safe = safe.replace(/\n/g, '<br>');
+
+  return safe;
+}
+
+function getCsrf() {
+  const c = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
+  return c ? c.split('=')[1].trim() : '';
+}
+
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+});
 </script>
 {% endblock %}

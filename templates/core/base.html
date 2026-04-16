@@ -14,93 +14,13 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3.2">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6.0">
     
-    <!-- EMERGENCY NAVBAR CSS (Fail-safe) -->
+    <!-- NAVBAR — inherits from style.css -->
     <style>
-        :root {
-            --nav-bg: rgba(255, 255, 255, 0.9);
-            --nav-border: rgba(46, 111, 64, 0.2);
-            --nav-text: #253D2C;
-            --nav-accent: #2E6F40;
-        }
-
+        /* Minimal overrides — main styles are in style.css */
         .navbar-wrapper {
-            position: fixed;
-            top: 20px;
-            left: 0;
-            width: 100%;
-            padding: 0 40px;
             z-index: 10000;
-            display: flex;
-            justify-content: center;
-        }
-
-        .nav-container-main {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1400px;
-            pointer-events: none;
-        }
-
-        .nav-pill {
-            pointer-events: auto;
-            background: var(--nav-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--nav-border);
-            padding: 8px 20px;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--nav-text);
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 6px 12px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: rgba(46, 111, 64, 0.1);
-            color: var(--nav-accent);
-        }
-
-        .nav-brand-center {
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-brand-center img {
-            height: 45px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-brand-center:hover {
-            transform: scale(1.05);
-        }
-
-        .logout-btn-text {
-            color: #d63031 !important;
-        }
-
-        /* Mobile specific emergency rules */
-        @media (max-width: 991px) {
-            .navbar-wrapper { top: 0; padding: 15px; background: white; border-bottom: 2px solid var(--nav-accent); }
-            .desktop-only { display: none !important; }
-            .nav-container-main { pointer-events: auto; }
         }
     </style>
 
@@ -177,18 +97,363 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
+    <style>
+        /* === PREMIUM WHITE + DARK GREEN FOOTER 2026 === */
+        .kisan-footer {
+            background: linear-gradient(160deg, #0f1e13 0%, #1a2e1f 50%, #0f1e13 100%);
+            color: #e8f5ed;
+            font-family: 'Jost', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kisan-footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #4ade80, #2E6F40, #4ade80, transparent);
+        }
+
+        /* Animated background blobs */
+        .footer-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            opacity: 0.12;
+        }
+        .footer-blob-1 {
+            top: -100px; left: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #4ade80, transparent);
+            animation: blob-drift 12s ease-in-out infinite alternate;
+        }
+        .footer-blob-2 {
+            bottom: -80px; right: -80px;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #2E6F40, transparent);
+            animation: blob-drift 15s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes blob-drift {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(30px, 20px) scale(1.15); }
+        }
+
+        /* Main grid */
+        .footer-main {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 5rem 2rem 3rem;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Brand column */
+        .footer-brand h2 {
+            font-family: 'Rationale', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(232,245,237,0.65);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 280px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.65rem;
+        }
+
+        .footer-social a {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(232,245,237,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: #2E6F40;
+            border-color: #2E6F40;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46,111,64,0.4);
+        }
+
+        /* Column headers */
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #4ade80;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(74,222,128,0.2);
+        }
+
+        /* Links */
+        .footer-links-col {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-links-col li a {
+            color: rgba(232,245,237,0.65);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            transition: all 0.25s ease;
+        }
+
+        .footer-links-col li a i {
+            width: 16px;
+            color: #4ade80;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: all 0.25s ease;
+        }
+
+        .footer-links-col li a:hover {
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        .footer-links-col li a:hover i {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Badges */
+        .footer-badge-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            font-size: 0.82rem;
+            color: rgba(232,245,237,0.75);
+            transition: all 0.3s ease;
+        }
+
+        .footer-badge:hover {
+            background: rgba(46,111,64,0.2);
+            border-color: rgba(74,222,128,0.25);
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        .footer-badge i {
+            color: #4ade80;
+            font-size: 1rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        /* Divider */
+        .footer-divider {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-divider hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(74,222,128,0.25), transparent);
+        }
+
+        /* Bottom bar */
+        .footer-bottom {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.82rem;
+            color: rgba(232,245,237,0.4);
+        }
+
+        .footer-copyright span { color: #4ade80; font-weight: 600; }
+
+        .footer-bottom-badges {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-bottom-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: rgba(232,245,237,0.5);
+            font-family: 'Noto Sans Devanagari', 'Jost', sans-serif;
+        }
+
+        .footer-bottom-pill i { color: #4ade80; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .footer-main { grid-template-columns: 1.2fr 1fr 1fr; gap: 2rem; }
+            .footer-main .footer-col:last-child { grid-column: 1 / -1; }
+        }
+
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                padding: 3rem 1.5rem 2rem;
+            }
+            .footer-brand { grid-column: 1 / -1; }
+            .footer-bottom { flex-direction: column; text-align: center; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .footer-main { grid-template-columns: 1fr; }
+        }
+    </style>
+    <footer class="kisan-footer">
+        <div class="footer-blob footer-blob-1"></div>
+        <div class="footer-blob footer-blob-2"></div>
+
+        <div class="footer-main">
+            <!-- Brand -->
             <div class="footer-brand">
-                <span>🌾 Kisan AI</span>
-                <p>AI-powered crop advisory for Indian farmers</p>
+                <h2>🌾 Kisan AI</h2>
+                <p>Empowering Indian agriculture with next-generation artificial intelligence, real-time government scheme updates, and smart crop recommendations.</p>
+                <div class="footer-social">
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
-            <div class="footer-links">
-                <span>Built with ❤️ for 🇮🇳 Indian Farmers</span>
-                <span class="footer-divider">|</span>
-                <span>Powered by Google Gemini AI</span>
-                <span class="footer-divider">|</span>
-                <span>किसानों की सेवा में</span>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links-col">
+                    <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="{% url 'advisor' %}"><i class="fas fa-chevron-right"></i> Crop Advisor</a></li>
+                    <li><a href="{% url 'help_center' %}"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+                    <li><a href="{% url 'profile' %}"><i class="fas fa-chevron-right"></i> My Profile</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}"><i class="fas fa-chevron-right"></i> Login</a></li>
+                    <li><a href="{% url 'register' %}"><i class="fas fa-chevron-right"></i> Register Free</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Govt Schemes -->
+            <div class="footer-col">
+                <h4>Gov Schemes</h4>
+                <ul class="footer-links-col">
+                    <li><a href="https://pmkisan.gov.in" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> PM-KISAN</a></li>
+                    <li><a href="https://pmfby.gov.in" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> PMFBY Insurance</a></li>
+                    <li><a href="https://enam.gov.in" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> e-NAM Market</a></li>
+                    <li><a href="https://pmksy.gov.in" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> PMKSY Irrigation</a></li>
+                    <li><a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Soil Health Card</a></li>
+                </ul>
+            </div>
+
+            <!-- Info Badges -->
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <div class="footer-badge-row">
+                    <div class="footer-badge">
+                        <i class="fas fa-robot"></i>
+                        <span>Powered by Google Gemini 2026</span>
+                    </div>
+                    <div class="footer-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure &amp; Privacy First</span>
+                    </div>
+                    <div class="footer-badge">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>Real-time AI Responses</span>
+                    </div>
+                    <div class="footer-badge">
+                        <i class="fas fa-heart"></i>
+                        <span>Built for 🇮🇳 Indian Farmers</span>
+                    </div>
+                    <div class="footer-badge" style="font-family:'Noto Sans Devanagari',sans-serif;">
+                        <i class="fas fa-seedling"></i>
+                        <span>किसानों की उन्नत सेवा में</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"><hr></div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                &copy; 2026 <span>Kisan AI</span> &mdash; All rights reserved. Made with ❤️ for India's farmers.
+            </div>
+            <div class="footer-bottom-badges">
+                <span class="footer-bottom-pill"><i class="fas fa-lock"></i> Secure</span>
+                <span class="footer-bottom-pill"><i class="fas fa-bolt"></i> Fast AI</span>
+                <span class="footer-bottom-pill" style="font-family:'Noto Sans Devanagari',sans-serif;">🌱 कृषि सेवा</span>
             </div>
         </div>
     </footer>

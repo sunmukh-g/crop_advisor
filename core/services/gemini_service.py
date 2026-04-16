@@ -163,15 +163,15 @@ Based on this information, provide a COMPREHENSIVE crop recommendation report. Y
     {{"month": "November", "hindi_month": "नवंबर", "activities": ["Post harvest", "Rabi preparation"], "crops_stage": "Complete"}},
     {{"month": "December", "hindi_month": "दिसंबर", "activities": ["Activity 1"], "crops_stage": "Rest period"}}
   ],
-  "farming_tips": "5-6 important farming tips specific to the farmer's conditions, soil type and location. Include information about government schemes like PM-KISAN, crop insurance (PMFBY), soil health card etc.",
+  "farming_tips": "5-6 important farming tips specific to the farmer's conditions, soil type and location. Include information about government schemes like PM-KISAN, crop insurance (PMFBY), soil health card etc. (as of 2026)",
   "government_schemes": [
     {{"name": "Scheme name", "benefit": "Benefit description", "how_to_apply": "Application method"}},
-    {{"name": "PM-KISAN", "benefit": "₹6000/year direct income support", "how_to_apply": "Apply at pmkisan.gov.in or nearest CSC"}},
-    {{"name": "PMFBY", "benefit": "Crop insurance against natural disasters", "how_to_apply": "Contact nearest bank or insurance company before sowing"}}
+    {{"name": "Local Scheme 1", "benefit": "Specific to this farmer's state/district (e.g. state-level subsidy)", "how_to_apply": "Application method"}},
+    {{"name": "PM-KISAN (2026 update)", "benefit": "Current direct income support", "how_to_apply": "Apply at pmkisan.gov.in"}}
   ]
 }}
 
-Provide realistic, location-specific recommendations for {farmer_data.get('location', 'India')}.
+Provide realistic, location-specific recommendations for {farmer_data.get('location', 'India')} as of 2026. Ensure that the `government_schemes` listed are explicitly tailored or highly relevant to farmers located in {farmer_data.get('location', 'India')}.
 """
     return prompt
 
@@ -255,7 +255,7 @@ def _get_mock_recommendations(farmer_data: dict, language: str = 'en') -> dict:
         "mandi_prices": mandi_prices,
         "seasonal_calendar": _get_seasonal_calendar(season, location, rng),
         "farming_tips": _get_farming_tips(soil, location, rng),
-        "government_schemes": _get_govt_schemes(rng),
+        "government_schemes": _get_govt_schemes(rng, location),
         "data_source": "mock"
     }
 
@@ -274,15 +274,15 @@ def _get_farming_tips(soil: str, location: str, rng) -> str:
     ]
     return "\n".join([f"{i+1}. {tip}" for i, tip in enumerate(rng.sample(tips_pool, 5))])
 
-def _get_govt_schemes(rng) -> list:
+def _get_govt_schemes(rng, location="India") -> list:
     schemes_pool = [
-        {"name": "PM-KISAN", "benefit": "₹6,000/year direct income support", "how_to_apply": "pmkisan.gov.in"},
-        {"name": "PMFBY", "benefit": "Comprehensive crop insurance at low premium", "how_to_apply": "Nearest bank branch"},
-        {"name": "Soil Health Card", "benefit": "Free soil testing to optimize fertilizer use", "how_to_apply": "Krishi Vigyan Kendra"},
-        {"name": "Kisan Credit Card (KCC)", "benefit": "Low-interest loans up to ₹3 Lakh", "how_to_apply": "SBI/PNB/Cooperative Banks"},
+        {"name": "PM-KISAN (2026)", "benefit": "₹6,000/year direct income support", "how_to_apply": "pmkisan.gov.in"},
+        {"name": "PMFBY 2.0", "benefit": "Comprehensive crop insurance at low premium", "how_to_apply": "Nearest bank branch"},
+        {"name": f"{location} State Agriculture Subsidy", "benefit": "State-specific subsidy for seed and equipment purchase (2026 scheme)", "how_to_apply": f"{location} Agriculture Dept/CSC"},
+        {"name": "Kisan Credit Card (KCC Plus)", "benefit": "Low-interest loans up to ₹3 Lakh", "how_to_apply": "SBI/PNB/Cooperative Banks"},
         {"name": "PKVY", "benefit": "Support and subsidy for organic farming", "how_to_apply": "State Agriculture Dept"},
-        {"name": "PMKSY", "benefit": "Subsidy on micro-irrigation systems", "how_to_apply": "Horticulture Department"},
-        {"name": "eNAM", "benefit": "Online trading platform for better prices", "how_to_apply": "enam.gov.in portal"}
+        {"name": f"{location} Krishi Yantra Yojna", "benefit": "Up to 50% subsidy on modern farming equipment", "how_to_apply": "Local Horticulture Department"},
+        {"name": "eNAM & Digital Mandi", "benefit": "Online trading platform for better prices", "how_to_apply": "enam.gov.in portal"}
     ]
     return rng.sample(schemes_pool, 3)
 
